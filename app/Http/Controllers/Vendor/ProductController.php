@@ -93,15 +93,15 @@ class ProductController extends Controller
             'variants.*.color_id' => 'nullable|exists:attribute_values,id',
         ];
 
-        foreach ($request->input('translations', []) as $lang => $data) {
-            $rules["translations.$lang.name"] = 'required|string|max:255';
-            $rules["translations.$lang.description"] = 'required|string|min:5';
-        }
+        $rules['translations'] = 'required|array';
+        $rules['translations.en.name'] = 'required|string|max:255';
+        $rules['translations.en.description'] = 'required|string|min:5';
 
         $validated = $request->validate($rules);
 
         DB::transaction(function () use ($request, $defaultLang, $vendorId) {
-            $slug = $this->generateUniqueSlug($request->translations[$defaultLang]['name']);
+            $defaultName = $request->translations['en']['name'] ?? 'product';
+            $slug = $this->generateUniqueSlug($defaultName);
 
             $product = Product::create([
                 'shop_id' => 1,
@@ -112,15 +112,14 @@ class ProductController extends Controller
                 'product_type' => 'variable',
             ]);
 
-            foreach ($request->translations as $lang => $data) {
-                $product->translations()->create([
-                    'language_code' => $lang,
-                    'name' => $data['name'],
-                    'description' => $data['description'] ?? null,
-                    'short_description' => $data['short_description'] ?? null,
-                    'tags' => $data['tags'] ?? null,
-                ]);
-            }
+            $data = $request->translations['en'] ?? [];
+            $product->translations()->create([
+                'language_code' => 'en',
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
+                'short_description' => $data['short_description'] ?? null,
+                'tags' => $data['tags'] ?? null,
+            ]);
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
@@ -228,7 +227,8 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'nullable|exists:brands,id',
-            'translations.'.$defaultLang.'.name' => 'required|string|max:255',
+            'translations' => 'required|array',
+            'translations.en.name' => 'required|string|max:255',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'variants' => 'required|array|min:1',
             'variants.*.name' => 'required|string|max:255',
@@ -250,17 +250,18 @@ class ProductController extends Controller
                 'brand_id' => $request->brand_id,
             ]);
 
-            foreach ($request->translations as $lang => $data) {
-                $product->translations()->updateOrCreate(
-                    ['language_code' => $lang],
-                    [
-                        'name' => $data['name'],
-                        'description' => $data['description'] ?? null,
-                        'short_description' => $data['short_description'] ?? null,
-                        'tags' => $data['tags'] ?? null,
-                    ]
-                );
-            }
+            $data = $request->translations['en'] ?? [];
+            $product->translations()->updateOrCreate(
+                ['language_code' => 'en'],
+                [
+                    'name' => $data['name'],
+                    'description' => $data['description'] ?? null,
+                    'short_description' => $data['short_description'] ?? null,
+                    'tags' => $data['tags'] ?? null,
+                ]
+            );
+
+            $product->translations()->where('language_code', '!=', 'en')->delete();
 
             if ($request->has('remove_images')) {
                 foreach ($request->remove_images as $imageId) {

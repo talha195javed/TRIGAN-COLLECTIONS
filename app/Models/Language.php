@@ -17,6 +17,6 @@ class Language extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('active', 1); // Assuming 'active' column holds a boolean or 1/0 value
+        return $query->where('active', 1)->where('code', 'en');
     }
 }
