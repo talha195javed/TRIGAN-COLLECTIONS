@@ -1,7 +1,7 @@
 {
     "name": "velstorelabs/velstore",
     "type": "project",
-    "description": "Velstore - A multi-vendor, multi-lingual Laravel eCommerce boilerplate.",
+    "description": "Trigan - A multi-vendor, multi-lingual Laravel eCommerce boilerplate.",
     "keywords": ["laravel", "ecommerce", "boilerplate", "multi-vendor", "multilingual"],
     "license": "MIT",
     "require": {

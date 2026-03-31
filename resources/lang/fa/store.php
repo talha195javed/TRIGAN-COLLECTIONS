@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'سیاست حفظ حریم خصوصی',
         'terms_of_service' => 'شرایط خدمات',
         'follow_us' => 'ما را دنبال کنید',
-        'footer_logo_alt' => 'لوگوی پاورقی Velstore',
-        'copyright' => '© ۲۰۲۵ نسخه نمایشی Velstore. تمامی حقوق محفوظ است.',
-        'powered_by' => 'قدرت گرفته از Velstore Labs',
+        'footer_logo_alt' => 'لوگوی پاورقی Trigan',
+        'copyright' => '© ۲۰۲۵ نسخه نمایشی Trigan. تمامی حقوق محفوظ است.',
+        'powered_by' => 'قدرت گرفته از Trigan Labs',
     ],
 
     'home' => [

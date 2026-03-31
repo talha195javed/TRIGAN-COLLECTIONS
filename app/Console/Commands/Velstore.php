@@ -21,7 +21,7 @@ class Velstore extends Command
      *
      * @var string
      */
-    protected $description = 'Install Velstore Ecommerce Built with Laravel.';
+    protected $description = 'Install Trigan Collections Built with Laravel.';
 
     /**
      * Execute the console command.
@@ -62,7 +62,7 @@ class Velstore extends Command
 
         $this->info("Application language set to: $locale");
 
-        $this->info('Velstore installation completed successfully.');
+        $this->info('Trigan installation completed successfully.');
 
         $this->info('Installing npm packages...');
         exec('npm install');

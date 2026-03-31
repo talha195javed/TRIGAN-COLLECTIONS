@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Politique de confidentialité',
         'terms_of_service' => 'Conditions d\'utilisation',
         'follow_us' => 'Suivez-nous',
-        'footer_logo_alt' => 'Logo du pied de page Velstore',
-        'copyright' => '© 2025 Démo Velstore. Tous droits réservés.',
-        'powered_by' => 'Propulsé par Velstore Labs',
+        'footer_logo_alt' => 'Logo du pied de page Trigan',
+        'copyright' => '© 2025 Démo Trigan. Tous droits réservés.',
+        'powered_by' => 'Propulsé par Trigan Labs',
     ],
 
     'home' => [

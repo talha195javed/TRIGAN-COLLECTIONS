@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Privacybeleid',
         'terms_of_service' => 'Algemene Voorwaarden',
         'follow_us' => 'Volg ons',
-        'footer_logo_alt' => 'Velstore Voettekst Logo',
-        'copyright' => '© 2025 Velstore Demo. Alle rechten voorbehouden.',
-        'powered_by' => 'Aangedreven door Velstore Labs',
+        'footer_logo_alt' => 'Trigan Voettekst Logo',
+        'copyright' => '© 2025 Trigan Demo. Alle rechten voorbehouden.',
+        'powered_by' => 'Aangedreven door Trigan Labs',
     ],
 
     'home' => [

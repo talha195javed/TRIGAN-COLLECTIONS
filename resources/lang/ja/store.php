@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'プライバシーポリシー',
         'terms_of_service' => '利用規約',
         'follow_us' => 'フォローする',
-        'footer_logo_alt' => 'Velstore フッターロゴ',
-        'copyright' => '© 2025 Velstore Demo. 全著作権所有。',
-        'powered_by' => 'Velstore Labsによって提供',
+        'footer_logo_alt' => 'Trigan フッターロゴ',
+        'copyright' => '© 2025 Trigan Demo. 全著作権所有。',
+        'powered_by' => 'Trigan Labsによって提供',
     ],
 
     'home' => [

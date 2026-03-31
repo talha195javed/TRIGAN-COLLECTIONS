@@ -14,9 +14,9 @@ return [
         'privacy_policy' => 'Kebijakan Privasi',
         'terms_of_service' => 'Syarat Layanan',
         'follow_us' => 'Ikuti Kami',
-        'footer_logo_alt' => 'Logo Footer Velstore',
-        'copyright' => '© 2025 Demo Velstore. Semua Hak Dilindungi.',
-        'powered_by' => 'Ditenagai oleh Velstore Labs',
+        'footer_logo_alt' => 'Logo Footer Trigan',
+        'copyright' => '© 2025 Demo Trigan. Semua Hak Dilindungi.',
+        'powered_by' => 'Ditenagai oleh Trigan Labs',
     ],
 
     'home' => [
