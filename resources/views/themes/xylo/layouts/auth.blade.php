@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Trigan Collections') }}</title>
     @if (!App::environment('testing'))
         @vite(['resources/views/themes/xylo/sass/app.scss'])
     @endif
@@ -28,7 +28,7 @@
         @endif
     @yield('css')
 </head>
-<body>
+<body class="tc-global">
     @yield('content')
     @if (!App::environment('testing'))
         @vite(['resources/views/themes/xylo/js/app.js'])

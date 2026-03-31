@@ -21,6 +21,7 @@
                 @if(empty($cart))
                     <p class="alert alert-warning">{{ __('store.cart.empty_cart') }}</p>
                 @else
+                <div class="tc-surface p-3 p-md-4">
                 <div class="table-responsive">
                     <table class="w-100 table">
                         <thead>
@@ -115,9 +116,10 @@
 
                     </table>
                 </div>
+                </div>
                 @endif
                 <div class="btn-group mt-4">
-                    <a href="{{ route('xylo.home') }}" class="btn-light">{{ __('store.cart.continue_shopping') }}</a>
+                    <a href="{{ url('/') }}" class="btn-light">{{ __('store.cart.continue_shopping') }}</a>
                     <a href="#" class="read-more update-cart">{{ __('store.cart.update_cart') }}</a>
                 </div>
             </div>

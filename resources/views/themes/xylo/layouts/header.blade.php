@@ -1,4 +1,4 @@
-<header>
+<header class="tc-header sticky-top">
 
      {{--  Wishlist Count --}}
     @php
@@ -15,45 +15,98 @@
     </div>  
 
     <div class="container py-3">
-        <!-- Row 2: Logo Left / Search Right -->
-        <div class="row align-items-center">
-            <div class="col-md-4 col-6">
-                <a href="{{ route('xylo.home') }}" class="navbar-brand">
-                    <img src="https://i.ibb.co/dHx2ZR3/velstore.png" width="80" alt="Logo" />
-                </a>
-            </div>
-            <div class="col-md-8 col-6 text-end">
-                <form class="d-flex justify-content-end" action="{{ url('/search') }}" method="GET">
-                    <div class="input-group search-input-width">
-                        <input type="text" class="form-control" id="search-input"  name="q" placeholder="{{ __('store.header.search_placeholder') }}">
+        <nav class="navbar navbar-expand-lg tc-navbar p-0">
+            <a href="{{ url('/') }}" class="navbar-brand me-3">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="https://i.ibb.co/dHx2ZR3/velstore.png" width="44" alt="Trigan Collections" />
+                    <span class="tc-brand-name d-none d-sm-inline">Trigan Collections</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler tc-nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#tcMainNav" aria-controls="tcMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="tcMainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center tc-nav-links">
+                    @php
+                        $present = [
+                            'home' => false,
+                            'shop' => false,
+                            'about' => false,
+                            'services' => false,
+                            'blog' => false,
+                            'contact' => false,
+                        ];
+                    @endphp
+                    @if ($headerMenu && $headerMenu->menuItems->count())
+                        @foreach ($headerMenu->menuItems as $menuItem)
+                            @php
+                                $menuSlug = trim((string) $menuItem->slug, '/');
+                                $menuHref = url($menuItem->slug);
+
+                                if ($menuSlug === '' || in_array($menuSlug, ['home', 'index'], true)) {
+                                    $present['home'] = true;
+                                    $menuHref = url('/');
+                                } elseif (in_array($menuSlug, ['shop', 'products'], true)) {
+                                    $present['shop'] = true;
+                                    $menuHref = route('shop.index');
+                                } elseif (in_array($menuSlug, ['about', 'about-us'], true)) {
+                                    $present['about'] = true;
+                                    $menuHref = route('xylo.about');
+                                } elseif (in_array($menuSlug, ['services', 'our-services'], true)) {
+                                    $present['services'] = true;
+                                    $menuHref = route('xylo.services');
+                                } elseif (in_array($menuSlug, ['blog', 'blogs', 'news'], true)) {
+                                    $present['blog'] = true;
+                                    $menuHref = route('xylo.blog');
+                                } elseif (in_array($menuSlug, ['contact', 'contact-us'], true)) {
+                                    $present['contact'] = true;
+                                    $menuHref = route('xylo.contact');
+                                }
+                            @endphp
+                            <li class="nav-item">
+                                <a class="nav-link menu-text-color" href="{{ $menuHref }}">{{ $menuItem->translation->title ?? 'No Translation' }}</a>
+                            </li>
+                        @endforeach
+
+                        @if (!$present['home'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ url('/') }}">Home</a></li>
+                        @endif
+                        @if (!$present['shop'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('shop.index') }}">Shop</a></li>
+                        @endif
+                        @if (!$present['about'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.about') }}">About</a></li>
+                        @endif
+                        @if (!$present['services'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.services') }}">Services</a></li>
+                        @endif
+                        @if (!$present['blog'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.blog') }}">Blog</a></li>
+                        @endif
+                        @if (!$present['contact'])
+                            <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.contact') }}">Contact</a></li>
+                        @endif
+                    @else
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ url('/') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('shop.index') }}">Shop</a></li>
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.about') }}">About</a></li>
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.services') }}">Services</a></li>
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.blog') }}">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link menu-text-color" href="{{ route('xylo.contact') }}">Contact</a></li>
+                    @endif
+                </ul>
+
+                <form class="d-flex tc-nav-search me-lg-3 mb-3 mb-lg-0" action="{{ url('/search') }}" method="GET">
+                    <div class="input-group w-100">
+                        <input type="text" class="form-control" id="search-input" name="q" placeholder="{{ __('store.header.search_placeholder') }}">
                         <button type="submit" class="btn btn-outline-secondary search-style"><i class="fa fa-search"></i></button>
                         <div id="search-suggestions" class="dropdown-menu show w-100 mt-5 d-none"></div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
 
-    <div class="container py-3">
-        <!-- Row 3: Menu Left / Actions Right -->
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <nav>
-                    <ul class="nav">
-                        @if ($headerMenu && $headerMenu->menuItems->count())
-                            @foreach ($headerMenu->menuItems as $menuItem)
-                                <li class="nav-item">
-                                    <a class="nav-link menu-text-color" href="{{ url($menuItem->slug) }}">
-                                        {{ $menuItem->translation->title ?? 'No Translation' }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        @endif
-                    </ul>
-                </nav>
-            </div>
-
-            <div class="col-md-4 d-flex justify-content-end align-items-center gap-3">
+                <div class="d-flex justify-content-end align-items-center gap-3 tc-nav-actions">
                 <!-- Language Selector -->
                 <form action="{{ route('change.store.language') }}" method="POST">
                     @csrf
@@ -78,7 +131,7 @@
                 </form>
 
                 <!-- Wishlist Icon -->
-                 <a href="{{ auth('customer')->check() ? route('customer.wishlist.index') : route('customer.login') }}" class="text-dark position-relative homepage-icon">
+                 <a href="{{ auth('customer')->check() ? route('customer.wishlist.index') : route('customer.login') }}" class="position-relative homepage-icon">
                     <i class="fa-regular fa-heart"></i>
 
                     @if($wishlistCount > 0)
@@ -90,7 +143,7 @@
                 </a>
 
                  <!-- Account Icon -->
-                <a href="#" class="text-dark dropdown-toggle homepage-icon" data-bs-toggle="dropdown">
+                <a href="#" class="dropdown-toggle homepage-icon" data-bs-toggle="dropdown">
                     @auth('customer')
                         @php
                             $customer = Auth::guard('customer')->user();
@@ -129,13 +182,14 @@
                 </ul>
 
                 <!-- Cart Icon -->
-                <a href="{{ route('cart.view') }}" class="text-dark position-relative homepage-icon">
+                <a href="{{ route('cart.view') }}" class="position-relative homepage-icon">
                     <i class="fa fa-shopping-bag"></i>
                     <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         {{ session('cart') ? collect(session('cart'))->sum('quantity') : 0 }}
                     </span>
                 </a>
+                </div>
             </div>
-        </div>
+        </nav>
     </div>
 </header>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Trigan Collections') }}</title>
     @if (!App::environment('testing'))
         @vite(['resources/views/themes/xylo/sass/app.scss'])
     @endif
@@ -29,7 +29,7 @@
     @yield('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>   
 </head>
-<body>
+<body class="tc-global">
     @include('themes.xylo.layouts.header')
     @yield('content')
     @include('themes.xylo.layouts.footer')

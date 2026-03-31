@@ -20,69 +20,29 @@
     <h2 class="mb-3">{{ $category->translation->name }}</h2>
 
     {{-- Filters --}}
-    <form method="GET" class="mb-4 d-flex gap-2">
-        <input type="number" name="min_price" class="form-control" placeholder="{{ __('store.category.min_price') }}" value="{{ request('min_price') }}">
-        <input type="number" name="max_price" class="form-control" placeholder="{{ __('store.category.max_price') }}" value="{{ request('max_price') }}">
-        <select name="sort" class="form-select">
-            <option value="">{{ __('store.category.sort_by') }}</option>
-            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('store.category.newest') }}</option>
-            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>{{ __('store.category.price_low_high') }}</option>
-            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>{{ __('store.category.price_high_low') }}</option>
-            <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>{{ __('store.category.top_rated') }}</option>
-        </select>
-        <button type="submit" class="btn btn-primary">{{ __('store.category.filter') }}</button>
-    </form>
+    <div class="tc-surface p-3 p-md-4 mb-4">
+        <form method="GET" class="d-flex gap-2 flex-wrap">
+            <input type="number" name="min_price" class="form-control" placeholder="{{ __('store.category.min_price') }}" value="{{ request('min_price') }}">
+            <input type="number" name="max_price" class="form-control" placeholder="{{ __('store.category.max_price') }}" value="{{ request('max_price') }}">
+            <select name="sort" class="form-select">
+                <option value="">{{ __('store.category.sort_by') }}</option>
+                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>{{ __('store.category.newest') }}</option>
+                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>{{ __('store.category.price_low_high') }}</option>
+                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>{{ __('store.category.price_high_low') }}</option>
+                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>{{ __('store.category.top_rated') }}</option>
+            </select>
+            <button type="submit" class="btn btn-primary">{{ __('store.category.filter') }}</button>
+        </form>
+    </div>
 
     {{-- Products --}}
-    <div class="row">
-        @forelse ($products as $product)
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="product-card">
-                    <div class="product-img">
-                        <a href="{{ route('product.show', $product->slug) }}">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}"
-                                 alt="{{ $product->translation->name ?? 'Product Name' }}">
-                        </a>
-                        <button class="wishlist-btn" data-product-id="{{ $product->id }}">
-                            <i class="fa-solid fa-heart"></i>
-                        </button>
-                    </div>
-                    <div class="product-info mt-4">
-                        <div class="top-info">
-                            <div class="reviews">
-                                <i class="fa-solid fa-star"></i> ({{ $product->reviews_count }} {{ __('store.category.reviews') }})
-                            </div>
-                        </div>
-                        <div class="bottom-info">
-                            <div class="left">
-                                <h3>
-                                    <a href="{{ route('product.show', $product->slug) }}" class="product-title">
-                                        {{ $product->translation->name ?? 'Product Name Not Available' }}
-                                    </a>
-                                </h3>
-                                <p class="price">
-                                    <span class="original {{ optional($product->primaryVariant)->converted_discount_price ? 'has-discount' : '' }}">
-                                        {{ activeCurrency()->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
-                                    </span>
-
-                                    @if(optional($product->primaryVariant)->converted_discount_price)
-                                        <span class="discount">
-                                            {{ activeCurrency()->symbol }}{{ $product->primaryVariant->converted_discount_price }}
-                                        </span>
-                                    @endif
-                                </p>
-                            </div>
-                            <button class="cart-btn" onclick="addToCart({{ $product->id }})">
-                                <i class="fa fa-shopping-bag"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <p>{{ __('store.category.no_products_found') }}</p>
-        @endforelse
-    </div>
+    @if($products->count() > 0)
+        <div class="row">
+            @include('themes.xylo.partials.product-list', ['products' => $products])
+        </div>
+    @else
+        <p>{{ __('store.category.no_products_found') }}</p>
+    @endif
 
     {{-- Pagination --}}
     <div class="d-flex justify-content-center mt-4">
