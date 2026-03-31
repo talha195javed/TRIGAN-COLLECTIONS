@@ -50,7 +50,7 @@ class MenuItemController extends Controller
             'order_number' => 'required|integer',
             'parent_id' => 'nullable|exists:menu_items,id',
             'title' => 'required|array',
-            'title.*' => 'required|string|max:255',
+            'title.en' => 'required|string|max:255',
         ]);
 
         try {
@@ -67,7 +67,7 @@ class MenuItemController extends Controller
     {
         $menuItem = MenuItem::with(['menu', 'translations'])->findOrFail($id);
         $menus = Menu::with('menuItems.translations')->get();
-        $languages = Language::where('active', 1)->get();
+        $languages = Language::active()->get();
 
         return view('admin.menu_items.edit', compact('menuItem', 'menus', 'languages'));
     }
@@ -79,7 +79,7 @@ class MenuItemController extends Controller
             'parent_id' => 'nullable|exists:menu_items,id',
             'order_number' => 'required|integer',
             'title' => 'required|array',
-            'title.*' => 'required|string|max:255',
+            'title.en' => 'required|string|max:255',
         ]);
 
         $this->menuItemService->updateMenuItem($request, $request->menu_id, $id);

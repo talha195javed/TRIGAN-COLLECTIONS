@@ -71,20 +71,16 @@ class PageController extends Controller
             'translations' => 'required|array',
         ];
 
-        foreach ($request->input('translations', []) as $lang => $data) {
-            $rules["translations.$lang.title"] = 'required|string|max:255';
-            $rules["translations.$lang.content"] = 'required|string|min:5';
-            $rules["translations.$lang.image"] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
-        }
+        $rules['translations.en.title'] = 'required|string|max:255';
+        $rules['translations.en.content'] = 'required|string|min:5';
+        $rules['translations.en.image'] = 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048';
 
         $request->validate($rules);
 
         $translations = $request->input('translations', []);
 
-        foreach ($translations as $lang => $translation) {
-            if ($request->hasFile("translations.$lang.image")) {
-                $translations[$lang]['image'] = $request->file("translations.$lang.image");
-            }
+        if ($request->hasFile('translations.en.image')) {
+            $translations['en']['image'] = $request->file('translations.en.image');
         }
 
         $defaultLang = config('app.locale');
@@ -103,21 +99,19 @@ class PageController extends Controller
             'status' => $request->status ?? 1,
         ]);
 
-        foreach ($request->translations as $lang => $data) {
-            $imagePath = null;
-
-            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-                $imagePath = $data['image']->store('pages', 'public');
-            }
-
-            PageTranslation::create([
-                'page_id' => $page->id,
-                'language_code' => $lang,
-                'title' => $data['title'],
-                'content' => $data['content'] ?? null,
-                'image_url' => $imagePath,
-            ]);
+        $data = $request->translations['en'] ?? [];
+        $imagePath = null;
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            $imagePath = $data['image']->store('pages', 'public');
         }
+
+        PageTranslation::create([
+            'page_id' => $page->id,
+            'language_code' => 'en',
+            'title' => $data['title'],
+            'content' => $data['content'] ?? null,
+            'image_url' => $imagePath,
+        ]);
 
         return redirect()->route('admin.pages.index')->with('success', 'Page created successfully.');
     }
@@ -138,11 +132,9 @@ class PageController extends Controller
             'translations' => 'required|array',
         ];
 
-        foreach ($request->input('translations', []) as $lang => $data) {
-            $rules["translations.$lang.title"] = 'required|string|max:255';
-            $rules["translations.$lang.content"] = 'nullable|string';
-            $rules["translations.$lang.image"] = 'nullable|image|max:2048';
-        }
+        $rules['translations.en.title'] = 'required|string|max:255';
+        $rules['translations.en.content'] = 'nullable|string';
+        $rules['translations.en.image'] = 'nullable|image|max:2048';
 
         $request->validate($rules);
 
@@ -150,33 +142,31 @@ class PageController extends Controller
             'status' => $request->status ?? 1,
         ]);
 
-        foreach ($request->translations as $lang => $data) {
-            $translation = PageTranslation::where('page_id', $page->id)->where('language_code', $lang)->first();
+        $data = $request->translations['en'] ?? [];
+        $translation = PageTranslation::where('page_id', $page->id)->where('language_code', 'en')->first();
+        $imagePath = $translation?->image_url;
 
-            $imagePath = $translation->image_url;
-
-            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-                if ($imagePath) {
-                    Storage::disk('public')->delete($imagePath);
-                }
-                $imagePath = $data['image']->store('pages', 'public');
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            if ($imagePath) {
+                Storage::disk('public')->delete($imagePath);
             }
+            $imagePath = $data['image']->store('pages', 'public');
+        }
 
-            if ($translation) {
-                $translation->update([
-                    'title' => $data['title'],
-                    'content' => $data['content'],
-                    'image_url' => $imagePath,
-                ]);
-            } else {
-                PageTranslation::create([
-                    'page_id' => $page->id,
-                    'language_code' => $lang,
-                    'title' => $data['title'],
-                    'content' => $data['content'],
-                    'image_url' => $imagePath,
-                ]);
-            }
+        if ($translation) {
+            $translation->update([
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'image_url' => $imagePath,
+            ]);
+        } else {
+            PageTranslation::create([
+                'page_id' => $page->id,
+                'language_code' => 'en',
+                'title' => $data['title'],
+                'content' => $data['content'],
+                'image_url' => $imagePath,
+            ]);
         }
 
         return redirect()->route('admin.pages.index')->with('success', 'Page updated successfully.');

@@ -60,7 +60,7 @@ class BannerController extends Controller
 
     public function create()
     {
-        $languages = Language::where('active', 1)->get();
+        $languages = Language::active()->get();
 
         return view('admin.banners.create', compact('languages'));
     }
@@ -76,7 +76,7 @@ class BannerController extends Controller
     {
         $banner = Banner::findOrFail($id);
 
-        $languages = Language::where('active', 1)->get();
+        $languages = Language::active()->get();
 
         $translations = BannerTranslation::where('banner_id', $banner->id)
             ->get()

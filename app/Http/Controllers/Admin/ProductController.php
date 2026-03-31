@@ -82,19 +82,26 @@ class ProductController extends Controller
             'variants.*.color_id' => 'nullable|exists:attribute_values,id',
         ];
 
-        foreach ($request->input('translations', []) as $lang => $data) {
-            $rules["translations.$lang.name"] = 'required|string|max:255';
-            $rules["translations.$lang.description"] = 'required|string|min:5';
-        }
+        $rules['translations'] = 'required|array';
+        $rules['translations.en.name'] = 'required|string|max:255';
+        $rules['translations.en.description'] = 'required|string|min:5';
 
         $validated = $request->validate($rules);
         DB::transaction(function () use ($request, $defaultLang) {
             $defaultName = $request->translations[$defaultLang]['name'] ?? 'product';
             $slug = $this->generateUniqueSlug($defaultName);
             $product = Product::create(['shop_id' => 1, 'vendor_id' => $request->vendor_id, 'slug' => $slug, 'category_id' => $request->category_id, 'brand_id' => $request->brand_id, 'product_type' => 'variable']);
-            foreach ($request->translations as $lang => $data) {
-                $product->translations()->create(['language_code' => $lang, 'name' => $data['name'], 'description' => $data['description'] ?? null, 'short_description' => $data['short_description'] ?? null, 'tags' => $data['tags'] ?? null]);
-            } if ($request->hasFile('images')) {
+
+            $data = $request->translations['en'] ?? [];
+            $product->translations()->create([
+                'language_code' => 'en',
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
+                'short_description' => $data['short_description'] ?? null,
+                'tags' => $data['tags'] ?? null,
+            ]);
+
+            if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('products', 'public');
                     $product->images()->create(['name' => $image->getClientOriginalName(), 'image_url' => $path, 'type' => 'thumb']);
@@ -153,16 +160,45 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $defaultLang = config('app.locale');
-        $validated = $request->validate(['category_id' => 'required|exists:categories,id', 'brand_id' => 'nullable|exists:brands,id', 'vendor_id' => 'required|exists:vendors,id', 'translations.'.$defaultLang.'.name' => 'required|string|max:255', 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', 'variants' => 'required|array|min:1', 'variants.*.id' => 'nullable|exists:product_variants,id', 'variants.*.name' => 'required|string|max:255', 'variants.*.price' => 'required|numeric|min:0', 'variants.*.discount_price' => 'nullable|numeric|min:0|lte:variants.*.price', 'variants.*.stock' => 'required|integer|min:0', 'variants.*.SKU' => 'required|string|max:255', 'variants.*.barcode' => 'nullable|string|max:255', 'variants.*.weight' => 'nullable|numeric|min:0', 'variants.*.dimensions' => 'nullable|string|max:255', 'variants.*.language_code' => 'nullable|string|size:2', 'variants.*.size_id' => 'nullable|exists:attribute_values,id', 'variants.*.color_id' => 'nullable|exists:attribute_values,id']);
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'brand_id' => 'nullable|exists:brands,id',
+            'vendor_id' => 'required|exists:vendors,id',
+            'translations' => 'required|array',
+            'translations.en.name' => 'required|string|max:255',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'variants' => 'required|array|min:1',
+            'variants.*.id' => 'nullable|exists:product_variants,id',
+            'variants.*.name' => 'required|string|max:255',
+            'variants.*.price' => 'required|numeric|min:0',
+            'variants.*.discount_price' => 'nullable|numeric|min:0|lte:variants.*.price',
+            'variants.*.stock' => 'required|integer|min:0',
+            'variants.*.SKU' => 'required|string|max:255',
+            'variants.*.barcode' => 'nullable|string|max:255',
+            'variants.*.weight' => 'nullable|numeric|min:0',
+            'variants.*.dimensions' => 'nullable|string|max:255',
+            'variants.*.language_code' => 'nullable|string|size:2',
+            'variants.*.size_id' => 'nullable|exists:attribute_values,id',
+            'variants.*.color_id' => 'nullable|exists:attribute_values,id',
+        ]);
         DB::transaction(function () use ($request, $product, $defaultLang) {
             $product->update(['category_id' => $request->category_id, 'brand_id' => $request->brand_id, 'vendor_id' => $request->vendor_id]);
             $newAttrValueIds = collect($request->variants)->flatMap(function ($v) {
                 return array_filter([$v['size_id'] ?? null, $v['color_id'] ?? null]);
             })->unique()->values()->all();
             ProductAttributeValue::where('product_id', $product->id)->whereNotIn('attribute_value_id', $newAttrValueIds)->delete();
-            foreach ($request->translations as $lang => $data) {
-                $product->translations()->updateOrCreate(['language_code' => $lang], ['name' => $data['name'], 'description' => $data['description'] ?? null, 'short_description' => $data['short_description'] ?? null, 'tags' => $data['tags'] ?? null]);
-            } if ($request->has('remove_images')) {
+            $data = $request->translations['en'] ?? [];
+            $product->translations()->updateOrCreate(
+                ['language_code' => 'en'],
+                [
+                    'name' => $data['name'],
+                    'description' => $data['description'] ?? null,
+                    'short_description' => $data['short_description'] ?? null,
+                    'tags' => $data['tags'] ?? null,
+                ]
+            );
+
+            if ($request->has('remove_images')) {
                 foreach ($request->remove_images as $imageId) {
                     $image = $product->images()->find($imageId);
                     if ($image) {

@@ -11,12 +11,15 @@ class LanguageController extends Controller
     {
         $lang = $request->input('lang');
 
-        if (! in_array($lang, ['en', 'es', 'de', 'ar', 'fa', 'it', 'nl', 'pl', 'pt', 'tr', 'zh', 'fr', 'ru', 'ja', 'ko', 'th', 'vi', 'hi', 'id'])) {
-            return response()->json(['error' => 'Unsupported language'], 400);
+        if ($lang !== 'en') {
+            session()->forget('locale');
+            app()->setLocale('en');
+
+            return redirect()->back()->with('success', 'Language changed successfully');
         }
 
-        session(['locale' => $lang]);
-        app()->setLocale($lang);
+        session()->forget('locale');
+        app()->setLocale('en');
 
         return redirect()->back()->with('success', 'Language changed successfully');
     }

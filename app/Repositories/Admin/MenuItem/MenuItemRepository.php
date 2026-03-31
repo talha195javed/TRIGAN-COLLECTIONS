@@ -24,8 +24,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function createMenuItem(Request $request, $menuId)
     {
         return DB::transaction(function () use ($request, $menuId) {
-            $defaultLang = array_key_first($request->title);
-            $defaultTitle = $request->title[$defaultLang] ?? 'menu-item';
+            $defaultTitle = $request->title['en'] ?? 'menu-item';
 
             $slug = Str::slug($defaultTitle);
             $slugCount = MenuItem::where('slug', 'like', "{$slug}%")->count();
@@ -40,12 +39,10 @@ class MenuItemRepository implements MenuItemRepositoryInterface
                 'parent_id' => $request->parent_id ?? null,
             ]);
 
-            foreach ($request->title as $lang => $title) {
-                $menuItem->translations()->create([
-                    'language_code' => $lang,
-                    'title' => $title,
-                ]);
-            }
+            $menuItem->translations()->create([
+                'language_code' => 'en',
+                'title' => $request->title['en'],
+            ]);
 
             return $menuItem;
         });
@@ -54,7 +51,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function updateMenuItem(Request $request, $menuId, $menuItemId)
     {
         $menuItem = MenuItem::with('translations')->findOrFail($menuItemId);
-        $slug = Str::slug($request->title[array_key_first($request->title)]);
+        $slug = Str::slug($request->title['en'] ?? 'menu-item');
 
         $menuItem->update([
             'menu_id' => $request->menu_id,
@@ -63,19 +60,17 @@ class MenuItemRepository implements MenuItemRepositoryInterface
             'slug' => $slug,
         ]);
 
-        foreach ($request->title as $languageCode => $title) {
-            $translation = $menuItem->translations()->where('language_code', $languageCode)->first();
-            if ($translation) {
-                $translation->update(['title' => $title]);
-            } else {
-                $menuItem->translations()->create([
-                    'language_code' => $languageCode,
-                    'title' => $title,
-                ]);
-            }
+        $translation = $menuItem->translations()->where('language_code', 'en')->first();
+        if ($translation) {
+            $translation->update(['title' => $request->title['en']]);
+        } else {
+            $menuItem->translations()->create([
+                'language_code' => 'en',
+                'title' => $request->title['en'],
+            ]);
         }
 
-        $menuItem->translations()->whereNotIn('language_code', array_keys($request->title))->delete();
+        $menuItem->translations()->where('language_code', '!=', 'en')->delete();
 
         return $menuItem;
     }

@@ -16,8 +16,9 @@ class LocaleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('locale')) {
-            App::setLocale(session('locale'));
+        App::setLocale('en');
+        if (session()->has('locale') && session('locale') !== 'en') {
+            session()->forget('locale');
         }
 
         return $next($request);

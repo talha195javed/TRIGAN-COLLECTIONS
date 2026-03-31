@@ -74,8 +74,8 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string|max:255',
-            'translations.*.value' => 'nullable|string|max:255',
+            'translations.en.name' => 'required|string|max:255',
+            'translations.en.value' => 'nullable|string|max:255',
         ]);
 
         $translations = $request->input('translations');
@@ -85,13 +85,12 @@ class ProductVariantController extends Controller
 
         $productVariant = ProductVariant::create($productVariantData);
 
-        foreach ($translations as $locale => $translation) {
-            $productVariant->translations()->create([
-                'locale' => $locale,
-                'name' => $translation['name'],
-                'value' => $translation['value'] ?? null,
-            ]);
-        }
+        $enTranslation = $translations['en'] ?? [];
+        $productVariant->translations()->create([
+            'locale' => 'en',
+            'name' => $enTranslation['name'] ?? $request->input('name'),
+            'value' => $enTranslation['value'] ?? null,
+        ]);
 
         return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant created successfully.');
     }
@@ -119,8 +118,8 @@ class ProductVariantController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'translations' => 'required|array',
-            'translations.*.name' => 'required|string|max:255',
-            'translations.*.value' => 'nullable|string|max:255',
+            'translations.en.name' => 'required|string|max:255',
+            'translations.en.value' => 'nullable|string|max:255',
         ]);
 
         $translations = $request->input('translations');
@@ -131,15 +130,14 @@ class ProductVariantController extends Controller
         $productVariant = ProductVariant::findOrFail($id);
         $productVariant->update($productVariantData);
 
-        foreach ($translations as $locale => $translation) {
-            $productVariant->translations()->updateOrCreate(
-                ['locale' => $locale],
-                [
-                    'name' => $translation['name'],
-                    'value' => $translation['value'] ?? null,
-                ]
-            );
-        }
+        $enTranslation = $translations['en'] ?? [];
+        $productVariant->translations()->updateOrCreate(
+            ['locale' => 'en'],
+            [
+                'name' => $enTranslation['name'] ?? $request->input('name'),
+                'value' => $enTranslation['value'] ?? null,
+            ]
+        );
 
         return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant updated successfully.');
     }

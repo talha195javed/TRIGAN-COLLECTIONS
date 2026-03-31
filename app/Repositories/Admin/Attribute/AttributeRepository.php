@@ -28,16 +28,12 @@ class AttributeRepository implements AttributeRepositoryInterface
                 'value' => $value,
             ]);
 
-            if (! empty($data['translations'])) {
-                foreach ($data['translations'] as $languageCode => $translatedValues) {
-                    if (! empty($translatedValues[$index])) {
-                        AttributeValueTranslation::create([
-                            'attribute_value_id' => $attributeValue->id,
-                            'language_code' => $languageCode,
-                            'translated_value' => $translatedValues[$index],
-                        ]);
-                    }
-                }
+            if (! empty($data['translations']['en']) && ! empty($data['translations']['en'][$index])) {
+                AttributeValueTranslation::create([
+                    'attribute_value_id' => $attributeValue->id,
+                    'language_code' => 'en',
+                    'translated_value' => $data['translations']['en'][$index],
+                ]);
             }
         }
 
@@ -56,16 +52,12 @@ class AttributeRepository implements AttributeRepositoryInterface
         foreach ($data['values'] as $index => $value) {
             $attributeValue = $attribute->values()->create(['value' => $value]);
 
-            if (! empty($data['translations'])) {
-                foreach ($data['translations'] as $languageCode => $translatedValues) {
-                    if (! empty($translatedValues[$index])) {
-                        \App\Models\AttributeValueTranslation::create([
-                            'attribute_value_id' => $attributeValue->id,
-                            'language_code' => $languageCode,
-                            'translated_value' => $translatedValues[$index],
-                        ]);
-                    }
-                }
+            if (! empty($data['translations']['en']) && ! empty($data['translations']['en'][$index])) {
+                \App\Models\AttributeValueTranslation::create([
+                    'attribute_value_id' => $attributeValue->id,
+                    'language_code' => 'en',
+                    'translated_value' => $data['translations']['en'][$index],
+                ]);
             }
         }
 

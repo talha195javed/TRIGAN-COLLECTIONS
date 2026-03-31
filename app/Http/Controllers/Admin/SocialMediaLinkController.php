@@ -47,7 +47,7 @@ class SocialMediaLinkController extends Controller
 
     public function create()
     {
-        $languages = Language::where('active', 1)->get();
+        $languages = Language::active()->get();
 
         return view('admin.social-media-links.create', compact('languages'));
     }
@@ -58,7 +58,7 @@ class SocialMediaLinkController extends Controller
             'type' => 'required|in:facebook,instagram,tiktok,youtube,x',
             'platform' => 'required|string|max:255',
             'link' => 'required|url',
-            'languages.*.name' => 'required|string|max:255',
+            'languages.en.name' => 'required|string|max:255',
         ]);
 
         $this->socialMediaLinkService->createSocialMediaLink($request->all());
@@ -69,7 +69,7 @@ class SocialMediaLinkController extends Controller
     public function edit($id)
     {
         $socialMediaLink = $this->socialMediaLinkService->getAllSocialMediaLinks()->find($id);
-        $languages = Language::where('active', 1)->get();
+        $languages = Language::active()->get();
         $translations = $socialMediaLink->translations->keyBy('language_code');
 
         return view('admin.social-media-links.edit', compact('socialMediaLink', 'languages', 'translations'));
@@ -81,7 +81,7 @@ class SocialMediaLinkController extends Controller
             'type' => 'required|in:facebook,instagram,tiktok,youtube,x',
             'platform' => 'required|string|max:255',
             'link' => 'required|url',
-            'languages.*.name' => 'required|string|max:255',
+            'languages.en.name' => 'required|string|max:255',
         ]);
 
         $this->socialMediaLinkService->updateSocialMediaLink($id, $request->all());
