@@ -26,7 +26,7 @@
                         @csrf
 
                         <!-- Shipping Information -->
-                        <div class="shipping_info">
+                        <div class="shipping_info tc-surface p-4 p-md-5">
                             <h3 class="cart-heading">{{ __('store.checkout.shipping_information') }}</h3>
                             <div class="row">
                                 <div class="col-md-6 mt-3">
@@ -74,7 +74,7 @@
                         </div>
 
                         <!-- Contact Information -->
-                        <div class="shipping_info">
+                        <div class="shipping_info tc-surface p-4 p-md-5 mt-4">
                             <h3 class="cart-heading mt-5">{{ __('store.checkout.contact_information') }}</h3>
                             <div class="row">
                                 <div class="col-md-6 mt-3">
@@ -87,7 +87,7 @@
                         </div>
 
                         <!-- Payment Method -->
-                        <div class="shipping_info mt-5">
+                        <div class="shipping_info tc-surface p-4 p-md-5 mt-4">
                             <h3 class="cart-heading">{{ __('store.checkout.payment_method') }}</h3>
 
                             @foreach($paymentGateways as $gateway)
@@ -120,7 +120,7 @@
                 </div>
 
                 <div class="col-md-5 mt-5 mt-md-0">
-                    <div class="cart-box">
+                    <div class="cart-box tc-surface p-4 p-md-5">
                         <h3 class="cart-heading">{{ __('store.checkout.order_summary') }}</h3>
 
                         <div class="row border-bottom pb-2 mb-2 mt-4">

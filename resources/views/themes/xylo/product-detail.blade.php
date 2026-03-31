@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 @php $currency = activeCurrency(); @endphp
-<section class="breadcrumb-section">
+<section class="breadcrumb-section tc-breadcrumb">
     <div class="container">
         <div class="breadcrumbs" aria-label="breadcrumb">
             <a href="{{ url('/') }}">{{ __('store.product_detail.home') }}</a>
@@ -19,20 +19,23 @@
         </div>
     </div>
 </section>
-<div class="main-detail pt-5 pb-5">
+<div class="main-detail pt-5 pb-5 tc-product-detail">
     <div class="container">
         <div class="row">
             <div class="col-md-6 position-relative">
-                <div class="product-slider">
-                    @foreach ($product->images as $image)
-                        <div>
-                            <img src="{{ Storage::url($image['image_url']) }}" alt="{{ $image['name'] }}" style="width: 100%; height: auto;" />
-                        </div>
-                    @endforeach
+                <div class="tc-surface tc-pdp-gallery p-3 p-md-4">
+                    <div class="product-slider">
+                        @foreach ($product->images as $image)
+                            <div>
+                                <img src="{{ Storage::url($image['image_url']) }}" alt="{{ $image['name'] }}" style="width: 100%; height: auto;" />
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
 
             </div>
             <div class="col-md-6 pro-textarea">
+                <div class="tc-surface tc-pdp-buybox p-4 p-md-5">
                 @if ($inStock)
                     <div id="product-stock" class="mb-2 mt-3 btnss">{{ __('store.product_detail.in_stock') }}</div>
                 @else
@@ -54,7 +57,7 @@
                     <span class="spanstar"> ({{ $product->reviews_count }} {{ __('store.product_detail.customer_reviews') }})</span>
                 </div>
                 <div class="d-flex align-items-center mb-3">
-                <h1 class="sec-heading mb-0 me-3">{{ $product->translation->name }}</h1>
+                <h1 class="sec-heading mb-0 me-3 tc-pdp-title">{{ $product->translation->name }}</h1>
 
                 @auth('customer')
                 @php
@@ -69,13 +72,13 @@
                     @endphp
                 @endauth
 
-                <button id="test-heart" class="border-0 bg-transparent">
+                <button id="test-heart" class="border-0 bg-transparent tc-pdp-heart" type="button">
                     <i class="{{ $isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-secondary' }} fs-4"></i>
                 </button>
 
             </div>
 
-                <h2><span id="currency-symbol">{{ $currency->symbol }}</span><span  id="variant-price" >{{ $product->primaryVariant->converted_price ?? 'N/A' }}</span></h2>
+                <h2 class="tc-pdp-price"><span id="currency-symbol">{{ $currency->symbol }}</span><span  id="variant-price" >{{ $product->primaryVariant->converted_price ?? 'N/A' }}</span></h2>
                 <p>{{ $product->translation->short_description }}</p>
 
 
@@ -126,9 +129,10 @@
                         <input type="text" id="qty" value="1">
                         <button onclick="changeQty(1)">+</button>
                     </div>
-                    <button class="add-to-cart read-more" onclick="addToCart({{ $product->id }}, '{{ $product->product_type }}')">{{ __('store.product_detail.add_to_cart') }}</button>
+                    <button class="add-to-cart read-more tc-pdp-add" onclick="addToCart({{ $product->id }}, '{{ $product->product_type }}')" type="button">{{ __('store.product_detail.add_to_cart') }}</button>
                 </div>
 
+                </div>
             </div>
         </div>
     </div>

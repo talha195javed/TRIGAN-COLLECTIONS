@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\PaymentGatewayConfigController;
 use App\Http\Controllers\Admin\PaymentGatewayController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductReviewController;
@@ -147,8 +146,10 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::delete('payment-gateways/{paymentGateway}', [PaymentGatewayController::class, 'destroy'])->name('payment-gateways.destroy');
 
     /* Payment Gateways Configs */
-    Route::get('payment_gateway_configs/getData', [PaymentGatewayConfigController::class, 'getData'])->name('payment_gateway_configs.getData');
-    Route::resource('payment_gateway_configs', PaymentGatewayConfigController::class)->except(['show']);
+    if (class_exists('App\\Http\\Controllers\\Admin\\PaymentGatewayConfigController')) {
+        Route::get('payment_gateway_configs/getData', ['App\\Http\\Controllers\\Admin\\PaymentGatewayConfigController', 'getData'])->name('payment_gateway_configs.getData');
+        Route::resource('payment_gateway_configs', 'App\\Http\\Controllers\\Admin\\PaymentGatewayConfigController')->except(['show']);
+    }
 
     /* Profile */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -159,11 +160,13 @@ Route::get('site-settings', [SiteSettingsController::class, 'index'])->name('sit
 Route::get('site-settings/edit', [SiteSettingsController::class, 'edit'])->name('admin.site-settings.edit');
 Route::put('site-settings/update', [SiteSettingsController::class, 'update'])->name('admin.site-settings.update');
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
-// PayPal success callback
-Route::get('/checkout/paypal/success', [CheckoutController::class, 'paypalSuccess'])
-    ->name('paypal.success');
-// PayPal cancel callback
-Route::get('/checkout/paypal/cancel', [CheckoutController::class, 'paypalCancel'])
-    ->name('paypal.cancel');
+if (class_exists('App\\Http\\Controllers\\CheckoutController')) {
+    Route::get('/checkout', ['App\\Http\\Controllers\\CheckoutController', 'index'])->name('checkout.index');
+    Route::post('/checkout/process', ['App\\Http\\Controllers\\CheckoutController', 'process'])->name('checkout.process');
+    // PayPal success callback
+    Route::get('/checkout/paypal/success', ['App\\Http\\Controllers\\CheckoutController', 'paypalSuccess'])
+        ->name('paypal.success');
+    // PayPal cancel callback
+    Route::get('/checkout/paypal/cancel', ['App\\Http\\Controllers\\CheckoutController', 'paypalCancel'])
+        ->name('paypal.cancel');
+}

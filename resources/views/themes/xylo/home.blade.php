@@ -1,33 +1,34 @@
 @extends('themes.xylo.layouts.master')
 @section('content')
     @php $currency = activeCurrency(); @endphp
-    {{-- Banner Section Start --}}
-    <section class="banner-area py-5 animate__animated animate__fadeIn">
-        <div class="container h-100 banner-slider">
-            @foreach ($banners as $banner)
-            <div>
-                <div class="row h-100 align-items-center">
-                    <div class="col-md-6">
-                        <h1 class="mt-5"><span>{{ $banner->translation ? $banner->translation->title : $banner->title }}</span>
-                        </h1>
-                        <p class="mt-3 mb-4">{{ __('store.home.banner_text') }}</p>
-                       <a href="{{ route('shop.index') }}" class="btn btn-primary">{{ __('store.home.shop_now') }}</a>
-
-                        <div class="mt-5">
-                            <img src="assets/images/slide-smallimages.png" alt="" style="width: 200px;">
+    <section class="tc-home-hero animate__animated animate__fadeIn">
+        <div class="container">
+            <div class="tc-home-hero-surface">
+                <div class="banner-slider">
+                    @foreach ($banners as $banner)
+                        <div>
+                            <div class="row align-items-center g-4">
+                                <div class="col-lg-6">
+                                    <div class="tc-eyebrow">Trigan Collections</div>
+                                    <h1 class="tc-hero-title">{{ $banner->translation ? $banner->translation->title : $banner->title }}</h1>
+                                    <p class="tc-hero-subtitle">{{ __('store.home.banner_text') }}</p>
+                                    <div class="d-flex gap-3 flex-wrap mt-4">
+                                        <a href="{{ route('shop.index') }}" class="btn tc-btn-primary">{{ __('store.home.shop_now') }}</a>
+                                        <a href="{{ route('xylo.about') }}" class="btn tc-btn-ghost">About Us</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="tc-home-hero-media">
+                                        <img src="{{ Storage::url(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="img-fluid" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="rightimg-banner rightimg-banner1">
-                            <img src="{{ Storage::url(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="img-fluid shoes-img" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
         </div>
     </section>
-    {{-- Banner Section End --}}
     <section class="cat-slider animate-on-scroll">
         <div class="container">
             <h2 class="text-start pb-5 sec-heading">{{ __('store.home.explore_popular_categories') }}</h2>

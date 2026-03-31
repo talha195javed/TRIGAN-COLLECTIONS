@@ -20,6 +20,10 @@ use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StoreController::class, 'index'])->name('xylo.home');
+Route::get('/about-us', [StoreController::class, 'about'])->name('xylo.about');
+Route::get('/services', [StoreController::class, 'services'])->name('xylo.services');
+Route::get('/blog', [StoreController::class, 'blog'])->name('xylo.blog');
+Route::get('/contact-us', [StoreController::class, 'contact'])->name('xylo.contact');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/change-currency', [CurrencyController::class, 'changeCurrency'])->name('change.currency');
 

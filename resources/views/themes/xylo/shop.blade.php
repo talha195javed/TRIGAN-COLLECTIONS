@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row">
             <aside class="col-md-3 d-none d-lg-inline">
-                <div class="sidebar" id="filterSidebar">
+                <div class="sidebar tc-surface tc-filter-sidebar" id="filterSidebar">
                     <h5 class="mb-3">{{ __('store.shop.brands') }}</h5>
                     @foreach($brands as $brand)
                     <div class="form-check mb-3">

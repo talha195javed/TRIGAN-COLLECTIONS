@@ -1,16 +1,16 @@
 @extends('themes.xylo.layouts.master')
 
 @section('content')
-<div class="container py-2">
+<div class="container py-5">
     <div class="row">
         <div class="col-lg-4 col-md-5 ms-auto">
-            <div class="card shadow-sm rounded-3" style="border: 0.1px solid #e9f8ee;">
+            <div class="tc-surface p-3 p-md-4">
 
-                <div class="card-header bg-white border-0 text-center py-2">
+                <div class="text-center py-2">
                     <h6 class="fw-semibold text-uppercase mb-1" style="font-size: 14px;">{{ __('store.profile.title') }}</h6>
                 </div>
                 
-                <div class="card-body px-2 py-1" style="font-size: 13px;">
+                <div class="px-2 py-1" style="font-size: 13px;">
 
                     {{-- Edit Form --}}
                     <form action="{{ route('customer.profile.update') }}" method="POST" enctype="multipart/form-data" class="small">
@@ -96,7 +96,7 @@
                         </div>
 
                         <div class="text-start">
-                            <button type="submit" class="btn btn-dark btn-sm px-3 py-1" style="font-size:13px;">
+                            <button type="submit" class="btn btn-primary btn-sm px-3 py-1" style="font-size:13px;">
                                 <i class="bi bi-save me-1"></i>{{ __('store.profile.save') }}
                             </button>
                         </div>
