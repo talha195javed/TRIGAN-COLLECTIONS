@@ -7,7 +7,8 @@
                 <div class="banner-slider">
                     @foreach ($banners as $banner)
                         <div>
-                            <div class="row align-items-center g-4">
+                            <div class="tc-hero-slide">
+                                <div class="row align-items-center g-4">
                                 <div class="col-lg-6">
                                     <div class="tc-eyebrow">Trigan Collections</div>
                                     <h1 class="tc-hero-title">{{ $banner->translation ? $banner->translation->title : $banner->title }}</h1>
@@ -22,9 +23,14 @@
                                         <img src="{{ Storage::url(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="img-fluid" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
                                     </div>
                                 </div>
+                                </div>
                             </div>
                         </div>
                     @endforeach
+                </div>
+                <div class="tc-hero-arrows" aria-label="Hero slider navigation">
+                    <button type="button" class="tc-hero-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button type="button" class="tc-hero-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
@@ -119,7 +125,7 @@
                     <div class="product-card">
                         <div class="product-img">
                             <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
-                            <button class="wishlist-btn"><i class="fa-solid fa-heart"></i></button>
+                            <button class="wishlist-btn" data-product-id="{{ $product->id }}"><i class="fa-solid fa-heart"></i></button>
                         </div>
                         <div class="product-info mt-4">
                             <div class="top-info">

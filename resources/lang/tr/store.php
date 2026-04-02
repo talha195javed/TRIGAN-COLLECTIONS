@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Hoş Geldiniz',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'signup_now' => 'Müşteri Hesabı Oluşturun',
         'signup_description' => 'Alışverişe başlamak, siparişlerinizi takip etmek, favorilerinizi kaydetmek ve özel fırsatlara erişmek için kaydolun.',
-        'copyright' => '© 2025 Xylo-Theme. Tüm hakları saklıdır.',
+        'copyright' => '© 2026 Trigan Collections. Tüm hakları saklıdır.',
         'welcome_back' => 'Hadi Başlayalım',
         'form_subtitle' => 'Alışveriş hesabınızı oluşturmak için bilgilerinizi girin.',
         'name' => 'Ad Soyad',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Tekrar Hoş Geldiniz',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'login_now' => 'Hesabınıza Giriş Yapın',
         'login_description' => 'Siparişlerinizi yönetmek, istek listenizi görüntülemek ve kişiselleştirilmiş alışveriş deneyiminin keyfini çıkarmak için giriş yapın.',
-        'copyright' => '© 2025 Xylo-Theme. Tüm hakları saklıdır.',
+        'copyright' => '© 2026 Trigan Collections. Tüm hakları saklıdır.',
         'welcome_back' => 'Sizi tekrar görmek güzel',
         'form_subtitle' => 'Devam etmek için giriş bilgilerinizi girin.',
         'email' => 'E-posta Adresi',

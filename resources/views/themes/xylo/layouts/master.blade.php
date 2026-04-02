@@ -48,7 +48,7 @@
     @yield('js')
     <script>
         $(document).ready(function () {
-            $('.category-slider').slick({
+            if ($('.category-slider').length) $('.category-slider').slick({
                 slidesToShow: 4,
                 slidesToScroll: 1,
                 autoplay: true,
@@ -78,18 +78,20 @@
                     }
                 ]
             });
-            $('.banner-slider').slick({
+            if ($('.banner-slider').length) $('.banner-slider').slick({
                 slidesToShow: 1,
                 slidesToScroll: 1,
                 autoplay: true,
                 fade: true,
-                speed: 500,
-                cssEase: 'linear',
+                speed: 700,
+                cssEase: 'ease',
                 autoplaySpeed: 5000,
                 dots: true,
-                arrows: false,
+                arrows: true,
+                prevArrow: $('.tc-hero-prev'),
+                nextArrow: $('.tc-hero-next'),
             });
-            $('.product-slider').slick({
+            if ($('.trending-products .product-slider, .tc-home-hero + .cat-slider + .trending-products .product-slider').length) $('.trending-products .product-slider, .tc-home-hero + .cat-slider + .trending-products .product-slider').slick({
                 slidesToShow: 4,
                 slidesToScroll: 1,
                 infinite: true,
@@ -118,6 +120,17 @@
                         }
                     }
                 ]
+            });
+
+            if ($('.tc-pdp-gallery .product-slider').length) $('.tc-pdp-gallery .product-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: true,
+                autoplay: false,
+                dots: true,
+                arrows: true,
+                prevArrow: '<button class="slick-prev"><i class="fa fa-angle-left"></i></button>',
+                nextArrow: '<button class="slick-next"><i class="fa fa-angle-right"></i></button>',
             });
         });
     </script>

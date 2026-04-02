@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
         currentY = 0;
     const ease = 0.1; // Smoothing factor
 
+     if (!bannerArea) return;
+
     bannerArea.addEventListener('mousemove', (e) => {
         // Find the currently active slide
         const activeSlide = bannerArea.querySelector('.slick-active');

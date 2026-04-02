@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Witamy',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'signup_now' => 'Utwórz konto klienta',
         'signup_description' => 'Zarejestruj się, aby rozpocząć zakupy, śledzić zamówienia, zapisywać ulubione produkty i uzyskać dostęp do ekskluzywnych ofert.',
-        'copyright' => '© 2025 Xylo-Theme. Wszelkie prawa zastrzeżone.',
+        'copyright' => '© 2026 Trigan Collections. Wszelkie prawa zastrzeżone.',
         'welcome_back' => 'Zacznijmy',
         'form_subtitle' => 'Wprowadź swoje dane, aby utworzyć konto zakupowe.',
         'name' => 'Imię i nazwisko',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Witamy ponownie',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'login_now' => 'Zaloguj się na swoje konto',
         'login_description' => 'Zaloguj się, aby zarządzać zamówieniami, listą życzeń i korzystać ze spersonalizowanych zakupów.',
-        'copyright' => '© 2025 Xylo-Theme. Wszelkie prawa zastrzeżone.',
+        'copyright' => '© 202 Trigan Collections. Wszelkie prawa zastrzeżone.',
         'welcome_back' => 'Miło cię znowu widzieć',
         'form_subtitle' => 'Wprowadź dane logowania, aby kontynuować.',
         'email' => 'Adres e-mail',

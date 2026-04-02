@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => '환영합니다',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'signup_now' => '고객 계정 생성',
         'signup_description' => '가입하고 쇼핑을 시작하세요. 주문을 추적하고, 즐겨찾기를 저장하며, 특별한 혜택을 받아보세요.',
-        'copyright' => '© 2025 Xylo-Theme. 모든 권리 보유.',
+        'copyright' => '© 2026 Trigan Collections. 모든 권리 보유.',
         'welcome_back' => '시작해봅시다',
         'form_subtitle' => '쇼핑 계정을 만들기 위해 정보를 입력하세요.',
         'name' => '이름',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => '다시 오신 것을 환영합니다',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'login_now' => '계정에 로그인',
         'login_description' => '주문을 관리하고, 위시리스트를 확인하며, 개인화된 쇼핑을 즐기기 위해 로그인하세요.',
-        'copyright' => '© 2025 Xylo-Theme. 모든 권리 보유.',
+        'copyright' => '© 2026 Trigan Collections. 모든 권리 보유.',
         'welcome_back' => '다시 만나서 반가워요',
         'form_subtitle' => '계속하려면 로그인 정보를 입력하세요.',
         'email' => '이메일 주소',
