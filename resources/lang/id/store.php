@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Selamat Datang',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'signup_now' => 'Buat Akun Pelanggan Anda',
         'signup_description' => 'Daftar untuk mulai berbelanja, melacak pesanan, menyimpan item favorit, dan mendapatkan penawaran eksklusif.',
-        'copyright' => '© 2025 Xylo-Theme. Hak cipta dilindungi undang-undang.',
+        'copyright' => '© 2026 Trigan Collections. Hak cipta dilindungi undang-undang.',
         'welcome_back' => 'Ayo Mulai',
         'form_subtitle' => 'Masukkan detail Anda untuk membuat akun belanja.',
         'name' => 'Nama Lengkap',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Selamat Datang Kembali',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'login_now' => 'Masuk ke Akun Anda',
         'login_description' => 'Akses akun Anda untuk mengelola pesanan, wishlist, dan menikmati pengalaman belanja yang dipersonalisasi.',
-        'copyright' => '© 2025 Xylo-Theme. Hak cipta dilindungi undang-undang.',
+        'copyright' => '© 2026 Trigan Collections. Hak cipta dilindungi undang-undang.',
         'welcome_back' => 'Senang Bertemu Anda Lagi',
         'form_subtitle' => 'Silakan masukkan detail login Anda untuk melanjutkan.',
         'email' => 'Alamat Email',

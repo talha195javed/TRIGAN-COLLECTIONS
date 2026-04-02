@@ -225,10 +225,10 @@ return [
 
     'register' => [
         'hello' => 'Chào mừng',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'signup_now' => 'Tạo tài khoản khách hàng',
         'signup_description' => 'Đăng ký để bắt đầu mua sắm, theo dõi đơn hàng, lưu sản phẩm yêu thích và nhận ưu đãi độc quyền.',
-        'copyright' => '© 2025 Xylo-Theme. Bảo lưu mọi quyền.',
+        'copyright' => '© 2026 Trigan Collections. Bảo lưu mọi quyền.',
         'welcome_back' => 'Hãy bắt đầu',
         'form_subtitle' => 'Nhập thông tin của bạn để tạo tài khoản mua sắm.',
         'name' => 'Họ và Tên',
@@ -242,10 +242,10 @@ return [
 
     'login' => [
         'hello' => 'Chào mừng trở lại',
-        'theme_name' => 'Xylo-Theme 👋',
+        'theme_name' => 'Trigan Collections 👋',
         'login_now' => 'Đăng nhập vào tài khoản của bạn',
         'login_description' => 'Đăng nhập để quản lý đơn hàng, danh sách yêu thích và tận hưởng trải nghiệm mua sắm cá nhân hóa.',
-        'copyright' => '© 2025 Xylo-Theme. Bảo lưu mọi quyền.',
+        'copyright' => '© 2026 Trigan Collections. Bảo lưu mọi quyền.',
         'welcome_back' => 'Rất vui được gặp lại bạn',
         'form_subtitle' => 'Vui lòng nhập thông tin đăng nhập để tiếp tục.',
         'email' => 'Địa chỉ Email',

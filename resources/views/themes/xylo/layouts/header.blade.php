@@ -8,12 +8,6 @@
         }
     @endphp
 
-    <div class="top-bar w-100 bg-light py-1 header-top-bar">
-        <div class="text-center small">
-            {{ __('store.header.top_bar_message') }} 
-        </div>
-    </div>  
-
     <div class="container py-3">
         <nav class="navbar navbar-expand-lg tc-navbar p-0">
             <a href="{{ url('/') }}" class="navbar-brand me-3">
@@ -138,14 +132,14 @@
                             $customer = Auth::guard('customer')->user();
                         @endphp
                         @if($customer->profile_image)
-                            <img src="{{ asset('storage/' . $customer->profile_image) }}" 
-                                alt="Profile" 
-                                class="rounded-circle" 
+                            <img src="{{ asset('storage/' . $customer->profile_image) }}"
+                                alt="Profile"
+                                class="rounded-circle"
                                 style="width:32px; height:32px; object-fit:cover;">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($customer->name) }}" 
-                                alt="Avatar" 
-                                class="rounded-circle" 
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($customer->name) }}"
+                                alt="Avatar"
+                                class="rounded-circle"
                                 style="width:32px; height:32px; object-fit:cover;">
                         @endif
                     @else
