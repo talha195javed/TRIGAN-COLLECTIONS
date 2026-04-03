@@ -91,15 +91,15 @@
                 prevArrow: $('.tc-hero-prev'),
                 nextArrow: $('.tc-hero-next'),
             });
-            if ($('.trending-products .product-slider, .tc-home-hero + .cat-slider + .trending-products .product-slider').length) $('.trending-products .product-slider, .tc-home-hero + .cat-slider + .trending-products .product-slider').slick({
+            if ($('.tc-section--gray .product-slider, .trending-products .product-slider').length) $('.tc-section--gray .product-slider, .trending-products .product-slider').slick({
                 slidesToShow: 4,
                 slidesToScroll: 1,
                 infinite: true,
                 autoplay: true,
                 autoplaySpeed: 3000,
                 arrows: true,
-                prevArrow: $('.prev'),
-                nextArrow: $('.next'),
+                prevArrow: $('.tc-slider-nav__btn.prev, .custom-arrows .prev'),
+                nextArrow: $('.tc-slider-nav__btn.next, .custom-arrows .next'),
                 responsive: [
                     {
                         breakpoint: 1024,
@@ -190,6 +190,26 @@
         });
 
 
+    </script>
+    <script>
+        /* Scroll animation observer */
+        document.addEventListener('DOMContentLoaded', function() {
+            var animSections = document.querySelectorAll('.animate-on-scroll');
+            if (!animSections.length) return;
+            if ('IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+                animSections.forEach(function(el) { observer.observe(el); });
+            } else {
+                animSections.forEach(function(el) { el.classList.add('visible'); });
+            }
+        });
     </script>
 </body>
 </html>

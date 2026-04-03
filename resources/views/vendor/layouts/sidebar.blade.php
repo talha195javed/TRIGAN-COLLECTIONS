@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <nav id="sidebar" class="d-flex flex-column p-3">
     <div class="logo-container">
-        <img src="{{ asset('storage/brands/logo-ready.png') }}" alt="{{ __('cms.sidebar.logo') }}">
+        <img src="{{ asset('storage/brands/logo1.png') }}" alt="{{ __('cms.sidebar.logo') }}">
     </div>
     <div class="search-container position-relative">
         <input type="text" class="form-control" placeholder="{{ __('cms.sidebar.search_placeholder') }}" id="searchInput" autocomplete="off">
@@ -21,7 +21,7 @@
                     <li><a class="nav-link {{ Route::currentRouteName() == 'vendor.products.index' ? 'active' : '' }}" href="{{ route('vendor.products.index') }}">{{ __('cms.sidebar.products.list') }}</a></li>
                 </ul>
             </div>
-        </li> 
+        </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#orderMenu" role="button" aria-expanded="false" aria-controls="orderMenu">
                 <span><i class="fas fa-shopping-cart me-2"></i> <span>{{ __('cms.sidebar.orders.title') }}</span></span>

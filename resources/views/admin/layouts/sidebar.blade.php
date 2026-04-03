@@ -1,7 +1,7 @@
 <!-- Sidebar -->
 <nav id="sidebar" class="d-flex flex-column p-3">
     <div class="logo-container">
-        <img src="{{ asset('storage/brands/logo-ready.png') }}" alt="{{ __('cms.sidebar.logo') }}">
+        <img src="{{ asset('storage/brands/logo1.png') }}" alt="{{ __('cms.sidebar.logo') }}">
     </div>
     <div class="search-container position-relative">
         <input type="text" class="form-control" placeholder="{{ __('cms.sidebar.search_placeholder') }}" id="searchInput" autocomplete="off">
@@ -33,7 +33,7 @@
                     <li><a class="nav-link {{ Route::currentRouteName() == 'admin.categories.index' ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">{{ __('cms.sidebar.categories.list') }}</a></li>
                 </ul>
             </div>
-        </li>           
+        </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#brandMenu" role="button" aria-expanded="false" aria-controls="brandMenu">
                 <span><i class="fas fa-tags me-2"></i> <span>{{ __('cms.sidebar.brands.title') }}</span></span>
@@ -45,7 +45,7 @@
                     <li><a class="nav-link {{ Route::currentRouteName() == 'admin.brands.index' ? 'active' : '' }}" href="{{ route('admin.brands.index') }}">{{ __('cms.sidebar.brands.list') }}</a></li>
                 </ul>
             </div>
-        </li>       
+        </li>
             <li class="nav-item">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#attributeMenu" role="button" aria-expanded="false" aria-controls="attributeMenu">
                     <span><i class="fas fa-cogs me-2"></i> <span>{{ __('cms.sidebar.attributes.title') }}</span></span>
@@ -57,7 +57,7 @@
                         <li><a class="nav-link {{ Route::currentRouteName() == 'admin.attributes.index' ? 'active' : '' }}" href="{{ route('admin.attributes.index') }}">{{ __('cms.sidebar.attributes.list') }}</a></li>
                     </ul>
                 </div>
-            </li>            
+            </li>
             <li class="nav-item">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#customerMenu" role="button" aria-expanded="false" aria-controls="customerMenu">
                     <span><i class="fas fa-users me-2"></i> <span>{{ __('cms.sidebar.customers.title') }}</span></span>
@@ -67,7 +67,7 @@
                     <ul class="nav flex-column ms-3">
                         <li><a class="nav-link {{ Route::currentRouteName() == 'admin.customers.index' ? 'active' : '' }}" href="{{ route('admin.customers.index') }}">{{ __('cms.sidebar.brands.list') }}</a></li>
                     </ul>
-                </div>                
+                </div>
                     <li class="nav-item">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#vendorMenu" role="button" aria-expanded="false" aria-controls="vendorMenu">
                     <span><i class="fas fa-user-tag me-2"></i> <span>{{ __('cms.sidebar.vendors.title') }}</span></span>
@@ -87,7 +87,7 @@
                         </li>
                     </ul>
                 </div>
-            </li>  
+            </li>
              <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#ordersMenu" role="button" aria-expanded="false" aria-controls="ordersMenu">
                 <span><i class="fas fa-shopping-cart me-2"></i> <span>{{ __('cms.sidebar.orders.title') }}</span></span>
@@ -100,7 +100,7 @@
                     <li><a class="nav-link {{ Route::currentRouteName() == 'admin.orders.completed' ? 'active' : '' }}" href="">{{ __('cms.sidebar.orders.completed_orders') }}</a></li>
                 </ul>
             </div>
-        </li>      
+        </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#paymentsMenu" role="button" aria-expanded="false" aria-controls="paymentsMenu">
                 <span><i class="fas fa-credit-card me-2"></i> <span>{{ __('cms.sidebar.payments.title') }}</span></span>
@@ -150,7 +150,7 @@
                         <li><a class="nav-link {{ Route::currentRouteName() == 'admin.product_reviews.index' ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">{{ __('cms.sidebar.product_reviews.list') }}</a></li>
                     </ul>
                 </div>
-            </li>                
+            </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#bannerMenu" role="button" aria-expanded="false" aria-controls="bannerMenu">
                 <span><i class="fas fa-image me-2"></i> <span>{{ __('cms.sidebar.banners.title') }}</span></span>
@@ -188,7 +188,7 @@
                     @endif
                 </ul>
             </div>
-        </li>                       
+        </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#socialMediaLinkMenu" role="button" aria-expanded="false" aria-controls="socialMediaLinkMenu">
                 <span><i class="fas fa-link me-2"></i> <span>{{ __('cms.sidebar.social_media_links.title') }}</span></span>
@@ -231,6 +231,6 @@
                     <li><a class="nav-link {{ Route::currentRouteName() == 'site-settings.index' ? 'active' : '' }}" href="{{ route('site-settings.index') }}">{{ __('cms.sidebar.site_settings.manage') }}</a></li>
                 </ul>
             </div>
-        </li>           
+        </li>
     </ul>
 </nav>

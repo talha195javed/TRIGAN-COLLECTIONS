@@ -4,70 +4,83 @@
 @endsection
 @section('content')
     @php $currency = activeCurrency(); @endphp
-    <section class="products-home py-5 mb-5 main-shop">
-    <div class="container">
-        <div class="row">
-            <aside class="col-md-3 d-none d-lg-inline">
-                <div class="sidebar tc-surface tc-filter-sidebar" id="filterSidebar">
-                    <h5 class="mb-3">{{ __('store.shop.brands') }}</h5>
-                    @foreach($brands as $brand)
-                    <div class="form-check mb-3">
-                        <input class="form-check-input filter-input" type="checkbox" name="brand[]" value="{{ $brand->id }}">
-                        <label class="form-check-label">
-                            {{ mb_convert_case($brand->translation->name ?? $brand->slug, MB_CASE_TITLE, "UTF-8") }}
-                        </label>
-                        <span class="text-muted">({{ $brand->products_count }})</span>
-                    </div>
-                    @endforeach
 
-                    <h5 class="mb-3">{{ __('store.shop.categories') }}</h5>
-                    @foreach($categories as $category)
-                    <div class="form-check mb-3">
-                        <input class="form-check-input filter-input" type="checkbox" name="category[]" value="{{ $category->id }}">
-                        <label class="form-check-label">
-                            {{ mb_convert_case($category->translation->name ?? $category->slug, MB_CASE_TITLE, "UTF-8") }}
-                        </label>
-                        <span class="text-muted">({{ $category->products_count }})</span>
-                    </div>
-                    @endforeach
-                    
-                    <h5>{{ __('store.shop.price') }}</h5>
-                    <div class="price-filter mb-3">
-                        <p id="priceRange" class="text-center">{{ $currency->symbol }}<span id="minPriceText">0</span> - {{ $currency->symbol }}<span id="maxPriceText">1000</span></p>
-                        <div class="range-slider">
-                            <input type="range" name="price_min" id="minPrice" min="0" max="1000" value="0" step="10">
-                            <input type="range" name="price_max" id="maxPrice" min="0" max="1000" value="1000" step="10">
+    <section class="tc-page-hero tc-page-hero--sm">
+        <div class="container">
+            <span class="tc-pill tc-pill--sm">Shop</span>
+            <h1 class="tc-page-hero__title">All Products</h1>
+            <p class="tc-page-hero__sub">Browse our curated collection of premium products</p>
+        </div>
+    </section>
+
+    <section class="tc-shop">
+        <div class="container">
+            <div class="row g-4">
+                <aside class="col-lg-3 d-none d-lg-block">
+                    <div class="tc-filter" id="filterSidebar">
+                        <div class="tc-filter__group">
+                            <h6 class="tc-filter__title">{{ __('store.shop.brands') }}</h6>
+                            @foreach($brands as $brand)
+                            <label class="tc-filter__check">
+                                <input class="filter-input" type="checkbox" name="brand[]" value="{{ $brand->id }}">
+                                <span>{{ mb_convert_case($brand->translation->name ?? $brand->slug, MB_CASE_TITLE, "UTF-8") }}</span>
+                                <small>({{ $brand->products_count }})</small>
+                            </label>
+                            @endforeach
+                        </div>
+
+                        <div class="tc-filter__group">
+                            <h6 class="tc-filter__title">{{ __('store.shop.categories') }}</h6>
+                            @foreach($categories as $category)
+                            <label class="tc-filter__check">
+                                <input class="filter-input" type="checkbox" name="category[]" value="{{ $category->id }}">
+                                <span>{{ mb_convert_case($category->translation->name ?? $category->slug, MB_CASE_TITLE, "UTF-8") }}</span>
+                                <small>({{ $category->products_count }})</small>
+                            </label>
+                            @endforeach
+                        </div>
+
+                        <div class="tc-filter__group">
+                            <h6 class="tc-filter__title">{{ __('store.shop.price') }}</h6>
+                            <p id="priceRange" class="tc-filter__range-text">{{ $currency->symbol }}<span id="minPriceText">0</span> — {{ $currency->symbol }}<span id="maxPriceText">1000</span></p>
+                            <div class="tc-filter__range">
+                                <input type="range" name="price_min" id="minPrice" min="0" max="1000" value="0" step="10">
+                                <input type="range" name="price_max" id="maxPrice" min="0" max="1000" value="1000" step="10">
+                            </div>
+                        </div>
+
+                        <div class="tc-filter__group">
+                            <h6 class="tc-filter__title">{{ __('store.shop.colors') }}</h6>
+                            @foreach(['red', 'black'] as $color)
+                            <label class="tc-filter__check">
+                                <input class="filter-input" type="checkbox" name="color[]" value="{{ strtolower($color) }}">
+                                <span>{{ __('store.shop.' . strtolower($color)) }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+
+                        <div class="tc-filter__group">
+                            <h6 class="tc-filter__title">{{ __('store.shop.size') }}</h6>
+                            @foreach(['M' => 'M', 'L' => 'L'] as $key => $size)
+                            <label class="tc-filter__check">
+                                <input class="filter-input" type="checkbox" name="size[]" value="{{ $key }}">
+                                <span>{{ __('store.shop.' . $key) }}</span>
+                            </label>
+                            @endforeach
                         </div>
                     </div>
-
-                    <h5 class="mb-3">{{ __('store.shop.colors') }}</h5>
-                    @foreach(['red', 'black'] as $color)
-                    <div class="form-check mb-3">
-                        <input class="form-check-input filter-input" type="checkbox" name="color[]" value="{{ strtolower($color) }}">
-                        <label class="form-check-label">{{ __('store.shop.' . strtolower($color)) }}</label>
+                </aside>
+                <div class="col-lg-9">
+                    <div class="row" id="productList">
+                        @include('themes.xylo.partials.product-list')
                     </div>
-                    @endforeach
-
-                    <h5 class="mt-4">{{ __('store.shop.size') }}</h5>
-                    @foreach(['M' => 'M', 'L' => 'L'] as $key => $size)
-                    <div class="form-check">
-                        <input class="form-check-input filter-input" type="checkbox" name="size[]" value="{{ $key }}">
-                        <label class="form-check-label">{{ __('store.shop.' . $key) }}</label>
+                    <div class="d-flex justify-content-center mt-5">
+                        {{ $products->links() }}
                     </div>
-                    @endforeach
-                </div>
-            </aside>
-            <div class="col-md-9">
-                <div class="row" id="productList">
-                    @include('themes.xylo.partials.product-list')
-                </div>
-                <div class="paginations d-flex justify-content-center align-items-center mt-5">
-                    {{ $products->links() }}
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 @endsection
 
 @section('js')

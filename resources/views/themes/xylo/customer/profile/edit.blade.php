@@ -1,111 +1,84 @@
 @extends('themes.xylo.layouts.master')
 
 @section('content')
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-4 col-md-5 ms-auto">
-            <div class="tc-surface p-3 p-md-4">
+<section class="tc-page-hero tc-page-hero--sm">
+    <div class="container">
+        <h1 class="tc-page-hero__title">{{ __('store.profile.title') }}</h1>
+    </div>
+</section>
 
-                <div class="text-center py-2">
-                    <h6 class="fw-semibold text-uppercase mb-1" style="font-size: 14px;">{{ __('store.profile.title') }}</h6>
-                </div>
-                
-                <div class="px-2 py-1" style="font-size: 13px;">
-
-                    {{-- Edit Form --}}
-                    <form action="{{ route('customer.profile.update') }}" method="POST" enctype="multipart/form-data" class="small">
+<section class="tc-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="tc-info-card tc-info-card--lg">
+                    <form action="{{ route('customer.profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
-                        {{-- Profile Image --}}
-                        <div class="text-center mb-2">
+                        <div class="text-center mb-4">
                             <img id="profilePreview"
                                 src="{{ $customer->profile_image 
                                     ? asset('storage/' . $customer->profile_image) 
-                                    : 'https://ui-avatars.com/api/?name=' . urlencode($customer->name) . '&background=0D8ABC&color=fff&size=70' }}"
+                                    : 'https://ui-avatars.com/api/?name=' . urlencode($customer->name) . '&background=d4af37&color=fff&size=80' }}"
                                 alt="Profile"
-                                class="rounded-circle shadow-sm mb-1"
-                                style="width:65px; height:65px; object-fit:cover; transition:0.3s;">
-
-                            <div class="d-flex justify-content-center">
-                                <label for="profile_image" class="btn btn-light btn-sm rounded-pill px-2 py-0 mt-0" style="font-size: 13px;">
-                                    {{ __('store.profile.choose_file') }}
-                                </label>
+                                class="tc-profile__avatar">
+                            <div class="mt-2">
+                                <label for="profile_image" class="tc-btn tc-btn--outline tc-btn--sm">{{ __('store.profile.choose_file') }}</label>
                                 <input type="file" id="profile_image" name="profile_image" accept="image/*" class="d-none">
                             </div>
-
-                            @error('profile_image')
-                                <div class="text-danger small mt-1" style="font-size: 12px;">{{ $message }}</div>
-                            @enderror
+                            @error('profile_image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.name') }}</label>
-                            <input type="text" name="name" value="{{ old('name', $customer->name) }}" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('name')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.email') }}</label>
-                            <input type="email" name="email" value="{{ old('email', $customer->email) }}" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('email')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.phone') }}</label>
-                            <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('Phone')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.address') }}</label>
-                            <textarea name="address" rows="2" class="form-control form-control-sm p-1" style="font-size:13px;">{{ old('address', $customer->address) }}</textarea>
-                            @error('address')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.current_password') }}</label>
-                            <input type="password" name="current_password" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('current_password')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.new_password') }}</label>
-                            <input type="password" name="password" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('password')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-2">
-                            <label class="form-label mb-0 small" style="font-size: 13px;">{{ __('store.profile.confirm_new_password') }}</label>
-                            <input type="password" name="password_confirmation" class="form-control form-control-sm p-1" style="font-size:13px;">
-                            @error('password_confirmation')
-                                <div class="text-danger small mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="text-start">
-                            <button type="submit" class="btn btn-primary btn-sm px-3 py-1" style="font-size:13px;">
-                                <i class="bi bi-save me-1"></i>{{ __('store.profile.save') }}
-                            </button>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="tc-form-label">{{ __('store.profile.name') }}</label>
+                                <input type="text" name="name" value="{{ old('name', $customer->name) }}" class="tc-input">
+                                @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="tc-form-label">{{ __('store.profile.email') }}</label>
+                                <input type="email" name="email" value="{{ old('email', $customer->email) }}" class="tc-input">
+                                @error('email') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="tc-form-label">{{ __('store.profile.phone') }}</label>
+                                <input type="text" name="phone" value="{{ old('phone', $customer->phone) }}" class="tc-input">
+                                @error('Phone') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label class="tc-form-label">{{ __('store.profile.address') }}</label>
+                                <textarea name="address" rows="1" class="tc-input">{{ old('address', $customer->address) }}</textarea>
+                                @error('address') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-12"><hr style="border-color: rgba(0,0,0,0.06);"></div>
+                            <div class="col-md-4">
+                                <label class="tc-form-label">{{ __('store.profile.current_password') }}</label>
+                                <input type="password" name="current_password" class="tc-input">
+                                @error('current_password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label class="tc-form-label">{{ __('store.profile.new_password') }}</label>
+                                <input type="password" name="password" class="tc-input">
+                                @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label class="tc-form-label">{{ __('store.profile.confirm_new_password') }}</label>
+                                <input type="password" name="password_confirmation" class="tc-input">
+                                @error('password_confirmation') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-12 mt-3">
+                                <button type="submit" class="tc-btn tc-btn--gold">
+                                    <i class="fa-solid fa-floppy-disk me-1"></i>{{ __('store.profile.save') }}
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @endsection
 @section('js')
 @if (session('success'))

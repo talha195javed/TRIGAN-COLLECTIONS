@@ -3,66 +3,51 @@
 @section('content')
 @php $currency = activeCurrency(); @endphp
 
-<div class="container py-5">
-    <h1 class="sec-heading mb-5">{{ __('store.wishlist.title') }}</h1>
-
-    @if($products->isEmpty())
-        <div class="alert alert-info">{{ __('store.wishlist.empty') }}</div>
-    @else
-        <div class="row">
-            @foreach ($products as $product)
-                <div class="col-6 col-md-4 col-lg-3 mb-4">
-                    <div class="product-card tc-product-card">
-                        <div class="product-img tc-product-img position-relative">
-                            <a href="{{ route('product.show', $product->slug) }}" class="d-block tc-product-media">
-                                <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}"
-                                     alt="{{ $product->translation->name }}" style="object-fit: contain; width: 100%; height: 250px;">
-                            </a>
-
-                            <button class="wishlist-btn tc-wishlist-btn" data-product-id="{{ $product->id }}" type="button">
-                                <i class="fa-solid fa-heart"></i>
-                            </button>
-                        </div>
-
-                        <div class="product-info mt-3 tc-product-info">
-                            <div class="top-info">
-                                <div class="reviews tc-product-reviews">
-                                    <i class="fa-solid fa-star"></i> {{ $product->reviews_count }} {{ __('store.wishlist.reviews') }}
-                                </div>
-                            </div>
-
-                            <div class="bottom-info tc-product-bottom">
-                                <div class="left">
-                                    <h3 class="tc-product-title mb-2">
-                                        <a href="{{ route('product.show', $product->slug) }}" class="product-title tc-product-link">
-                                            {{ $product->translation->name }}
-                                        </a>
-                                    </h3>
-
-                                    <p class="price tc-product-price mb-0">
-                                        <span class="original {{ optional($product->primaryVariant)->converted_discount_price ? 'has-discount' : '' }}">
-                                            {{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
-                                        </span>
-
-                                        @if(optional($product->primaryVariant)->converted_discount_price)
-                                            <span class="discount"> 
-                                                {{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}
-                                            </span>
-                                        @endif
-                                    </p>
-                                </div>
-
-                                <button class="cart-btn tc-cart-btn" onclick="addToCart({{ $product->id }})" type="button">
-                                    <i class="fa fa-shopping-bag"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+    <section class="tc-page-hero tc-page-hero--sm">
+        <div class="container">
+            <span class="tc-pill tc-pill--sm"><i class="fa-solid fa-heart me-1"></i> Wishlist</span>
+            <h1 class="tc-page-hero__title">{{ __('store.wishlist.title') }}</h1>
         </div>
-    @endif
-</div>
+    </section>
+
+    <section class="tc-shop">
+        <div class="container">
+            @if($products->isEmpty())
+                <div class="tc-empty-state">
+                    <i class="fa-regular fa-heart"></i>
+                    <p>{{ __('store.wishlist.empty') }}</p>
+                    <a href="{{ route('shop.index') }}" class="tc-btn tc-btn--gold">Browse Products</a>
+                </div>
+            @else
+                <div class="row">
+                    @foreach ($products as $product)
+                        <div class="col-xl-3 col-lg-4 col-md-4 col-6 mb-4">
+                            <div class="tc-pcard">
+                                <div class="tc-pcard__visual">
+                                    <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name }}">
+                                    <button class="tc-pcard__wish wishlist-btn" data-product-id="{{ $product->id }}" type="button"><i class="fa-solid fa-heart"></i></button>
+                                    <div class="tc-pcard__overlay">
+                                        <a href="{{ route('product.show', $product->slug) }}" class="tc-pcard__action"><i class="fa-solid fa-eye"></i></a>
+                                        <button class="tc-pcard__action tc-pcard__action--dark" onclick="addToCart({{ $product->id }})" type="button"><i class="fa-solid fa-bag-shopping"></i></button>
+                                    </div>
+                                </div>
+                                <div class="tc-pcard__body">
+                                    <div class="tc-pcard__stars"><i class="fa-solid fa-star"></i><span>{{ $product->reviews_count }} {{ __('store.wishlist.reviews') }}</span></div>
+                                    <h3 class="tc-pcard__name"><a href="{{ route('product.show', $product->slug) }}">{{ $product->translation->name }}</a></h3>
+                                    <div class="tc-pcard__price">
+                                        <span class="tc-pcard__price-now {{ optional($product->primaryVariant)->converted_discount_price ? 'tc-pcard__price-now--old' : '' }}">{{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}</span>
+                                        @if(optional($product->primaryVariant)->converted_discount_price)
+                                        <span class="tc-pcard__price-sale">{{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
 @endsection
 
 @section('js')

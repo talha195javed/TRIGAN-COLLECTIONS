@@ -16,7 +16,7 @@ class BrandSeeder extends Seeder
     {
         $languages = Language::where('active', 1)->get();
 
-        $logoPath = 'brands/logo-ready.png';
+        $logoPath = 'brands/logo1.png';
         if (! Storage::disk('public')->exists($logoPath)) {
             Storage::disk('public')->put($logoPath, file_get_contents('https://i.postimg.cc/vH39NxBy/velstore-logo-removebg-preview.png'));
         }

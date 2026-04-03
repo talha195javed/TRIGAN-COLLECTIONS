@@ -4,271 +4,205 @@
 @endsection
 @section('content')
 @php $currency = activeCurrency(); @endphp
-<section class="breadcrumb-section tc-breadcrumb">
+
+<section class="tc-breadcrumb">
     <div class="container">
-        <div class="breadcrumbs" aria-label="breadcrumb">
+        <nav class="tc-breadcrumb__nav" aria-label="breadcrumb">
             <a href="{{ url('/') }}">{{ __('store.product_detail.home') }}</a>
-            <i class="fa fa-angle-right"></i>
             @foreach($breadcrumbs as $category)
-                <a href="{{ url('category/' . $category->slug) }}">
-                    {{ $category->translation->name ?? $category->slug }}
-                </a>
-                <i class="fa fa-angle-right"></i>
+                <i class="fa-solid fa-chevron-right"></i>
+                <a href="{{ url('category/' . $category->slug) }}">{{ $category->translation->name ?? $category->slug }}</a>
             @endforeach
+            <i class="fa-solid fa-chevron-right"></i>
             <span>{{ $product->translation->name }}</span>
-        </div>
+        </nav>
     </div>
 </section>
-<div class="main-detail pt-5 pb-5 tc-product-detail">
+
+<section class="tc-pdp">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 position-relative">
-                <div class="tc-surface tc-pdp-gallery p-3 p-md-4">
+        <div class="row g-4 g-lg-5">
+            <div class="col-lg-6">
+                <div class="tc-pdp__gallery">
                     <div class="product-slider">
                         @foreach ($product->images as $image)
                             <div>
-                                <img src="{{ Storage::url($image['image_url']) }}" alt="{{ $image['name'] }}" style="width: 100%; height: auto;" />
+                                <img src="{{ Storage::url($image['image_url']) }}" alt="{{ $image['name'] }}" class="tc-pdp__gallery-img" />
                             </div>
                         @endforeach
                     </div>
                 </div>
-
             </div>
-            <div class="col-md-6 pro-textarea">
-                <div class="tc-surface tc-pdp-buybox p-4 p-md-5">
-                @if ($inStock)
-                    <div id="product-stock" class="mb-2 mt-3 btnss">{{ __('store.product_detail.in_stock') }}</div>
-                @else
-                    <div id="product-stock" class="mb-2 mt-3 btnss text-danger">OUT OF STOCK</div>
-                @endif
-                @php
-                    $averageRating = round($product->reviews_avg_rating, 1);
-                @endphp
-                <div class="stars">
-                    @for ($i = 1; $i <= 5; $i++)
-                        @if ($i <= floor($averageRating))
-                            <i class="fa-solid fa-star text-warning"></i>
-                        @elseif ($i - 0.5 == $averageRating)
-                            <i class="fa-solid fa-star-half-alt text-warning"></i>
-                        @else
-                            <i class="fa-regular fa-star text-muted"></i>
-                        @endif
-                    @endfor
-                    <span class="spanstar"> ({{ $product->reviews_count }} {{ __('store.product_detail.customer_reviews') }})</span>
-                </div>
-                <div class="d-flex align-items-center mb-3">
-                <h1 class="sec-heading mb-0 me-3 tc-pdp-title">{{ $product->translation->name }}</h1>
+            <div class="col-lg-6">
+                <div class="tc-pdp__buybox">
+                    @if ($inStock)
+                        <span id="product-stock" class="tc-pdp__stock tc-pdp__stock--in">{{ __('store.product_detail.in_stock') }}</span>
+                    @else
+                        <span id="product-stock" class="tc-pdp__stock tc-pdp__stock--out">OUT OF STOCK</span>
+                    @endif
 
-                @auth('customer')
-                @php
-                    $isFavorite = auth('customer')->user()
-                        ->wishlistProducts()
-                        ->where('product_id', $product->id)
-                        ->exists();
-                @endphp
-                @else
-                    @php
-                        $isFavorite = false; 
-                    @endphp
-                @endauth
-
-                <button id="test-heart" class="border-0 bg-transparent tc-pdp-heart" type="button">
-                    <i class="{{ $isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart text-secondary' }} fs-4"></i>
-                </button>
-
-            </div>
-
-                <h2 class="tc-pdp-price"><span id="currency-symbol">{{ $currency->symbol }}</span><span  id="variant-price" >{{ $product->primaryVariant->converted_price ?? 'N/A' }}</span></h2>
-                <p>{{ $product->translation->short_description }}</p>
-
-
-
-
-                <div id="product-attributes" class="product-options">
-                    @php
-                        $groupedAttributes = $product->attributeValues->groupBy(fn($item) => $item->attribute->id);
-                    @endphp
-
-                    @foreach ($groupedAttributes as $attributeId => $values)
-                        <div class="attribute-options mt-3">
-                            <h3>{{ __('store.product_detail.' . strtolower($values->first()->attribute->name)) }}</h3>
-                            <div class="{{ strtolower($values->first()->attribute->name) }}-wrapper">
-                                @foreach ($values as $index => $value)
-                                    @php
-                                        $inputId = strtolower($values->first()->attribute->name) . '-' . $index;
-                                    @endphp
-                                    <input 
-                                        type="radio" 
-                                        name="attribute_{{ $attributeId }}" 
-                                        id="{{ $inputId }}"
-                                        value="{{ $value->id }}"
-                                        {{ $index === 0 ? 'checked' : '' }}
-                                    >
-                                   <label 
-                                        for="{{ $inputId }}" 
-                                        class="{{ strtolower($values->first()->attribute->name) === 'color' ? 'color-circle' : 'size-box' }}"
-                                        style="{{ strtolower($values->first()->attribute->name) === 'color' ? 'background-color:' . strtolower($value->value) . ';' : '' }}"
-                                    >
-                                    @if(strtolower($values->first()->attribute->name) === 'size')
-                                        {{ $value->translated_value }}
-                                    @endif
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-
-
-
-                <!-- Quantity Selector and Cart Button -->
-                <div class="cart-actions mt-3 d-flex">
-                    <div class="quantity me-4">
-                        <button onclick="changeQty(-1)">-</button>
-                        <input type="text" id="qty" value="1">
-                        <button onclick="changeQty(1)">+</button>
+                    @php $averageRating = round($product->reviews_avg_rating, 1); @endphp
+                    <div class="tc-pdp__stars">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= floor($averageRating))
+                                <i class="fa-solid fa-star"></i>
+                            @elseif ($i - 0.5 == $averageRating)
+                                <i class="fa-solid fa-star-half-alt"></i>
+                            @else
+                                <i class="fa-regular fa-star"></i>
+                            @endif
+                        @endfor
+                        <span>({{ $product->reviews_count }} {{ __('store.product_detail.customer_reviews') }})</span>
                     </div>
-                    <button class="add-to-cart read-more tc-pdp-add" onclick="addToCart({{ $product->id }}, '{{ $product->product_type }}')" type="button">{{ __('store.product_detail.add_to_cart') }}</button>
-                </div>
 
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <h1 class="tc-pdp__title">{{ $product->translation->name }}</h1>
+                        @auth('customer')
+                            @php $isFavorite = auth('customer')->user()->wishlistProducts()->where('product_id', $product->id)->exists(); @endphp
+                        @else
+                            @php $isFavorite = false; @endphp
+                        @endauth
+                        <button id="test-heart" class="tc-pdp__heart" type="button">
+                            <i class="{{ $isFavorite ? 'fa-solid fa-heart text-danger' : 'fa-regular fa-heart' }}"></i>
+                        </button>
+                    </div>
+
+                    <div class="tc-pdp__price">
+                        <span id="currency-symbol">{{ $currency->symbol }}</span><span id="variant-price">{{ $product->primaryVariant->converted_price ?? 'N/A' }}</span>
+                    </div>
+
+                    <p class="tc-pdp__desc">{{ $product->translation->short_description }}</p>
+
+                    <div id="product-attributes" class="tc-pdp__options">
+                        @php $groupedAttributes = $product->attributeValues->groupBy(fn($item) => $item->attribute->id); @endphp
+                        @foreach ($groupedAttributes as $attributeId => $values)
+                            <div class="tc-pdp__attr">
+                                <h6>{{ __('store.product_detail.' . strtolower($values->first()->attribute->name)) }}</h6>
+                                <div class="tc-pdp__attr-wrap">
+                                    @foreach ($values as $index => $value)
+                                        @php $inputId = strtolower($values->first()->attribute->name) . '-' . $index; @endphp
+                                        <input type="radio" name="attribute_{{ $attributeId }}" id="{{ $inputId }}" value="{{ $value->id }}" {{ $index === 0 ? 'checked' : '' }}>
+                                        <label for="{{ $inputId }}" class="{{ strtolower($values->first()->attribute->name) === 'color' ? 'tc-pdp__color' : 'tc-pdp__size' }}" style="{{ strtolower($values->first()->attribute->name) === 'color' ? 'background-color:' . strtolower($value->value) . ';' : '' }}">
+                                            @if(strtolower($values->first()->attribute->name) === 'size') {{ $value->translated_value }} @endif
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="tc-pdp__actions">
+                        <div class="tc-pdp__qty">
+                            <button onclick="changeQty(-1)" type="button">-</button>
+                            <input type="text" id="qty" value="1">
+                            <button onclick="changeQty(1)" type="button">+</button>
+                        </div>
+                        <button class="tc-btn tc-btn--gold tc-btn--lg flex-grow-1" onclick="addToCart({{ $product->id }}, '{{ $product->product_type }}')" type="button">
+                            <i class="fa-solid fa-bag-shopping"></i> {{ __('store.product_detail.add_to_cart') }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="reviewbox py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
+</section>
 
-        <!-- Tabs -->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description"
-                    type="button" role="tab" aria-controls="description" aria-selected="true">{{ __('store.product_detail.description') }}</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
-                    type="button" role="tab" aria-controls="reviews" aria-selected="false">{{ __('store.product_detail.reviews') }} ({{ $product->reviews_count }})</button>
-          </li>
+<section class="tc-pdp-tabs">
+    <div class="container">
+        <ul class="nav tc-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="tc-tabs__btn active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">{{ __('store.product_detail.description') }}</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="tc-tabs__btn" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">{{ __('store.product_detail.reviews') }} ({{ $product->reviews_count }})</button>
+            </li>
         </ul>
 
-        <!-- Tab Content -->
-        <div class="tab-content pt-3" id="myTabContent">
-          <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-            {!! $product->translation->description !!}
-          </div>
-          <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-           <div class="product-detail-customer-review">
-
-               {{-- Review Form Always Visible Above Review List --}}
-                @auth('customer')
-                <div class="mt-4 mb-4">
-                    <h5>{{ __('store.product_detail.submit_review_title') }}</h5>
-
-                    <form action="{{ route('review.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="hidden" name="rating" id="rating-value" required>
-
-                        {{-- Star Rating --}}
-                        <div id="starWrapper" style="font-size: 1.5rem; line-height: 1; display: inline-block;">
-                            <span class="star" data-value="1" style="color:#ccc; cursor:pointer;">★</span>
-                            <span class="star" data-value="2" style="color:#ccc; cursor:pointer;">★</span>
-                            <span class="star" data-value="3" style="color:#ccc; cursor:pointer;">★</span>
-                            <span class="star" data-value="4" style="color:#ccc; cursor:pointer;">★</span>
-                            <span class="star" data-value="5" style="color:#ccc; cursor:pointer;">★</span>
-                        </div>
-
-                        {{-- Optional Review Text --}}
-                        <div class="mb-3 mt-3">
-                            <label>{{ __('store.product_detail.review_optional') }}</label>
-                            <textarea name="review" class="form-control" rows="3"></textarea>
-                        </div>
-
-                        <button class="btn btn-primary">{{ __('store.product_detail.submit_review_btn') }}</button>
-                    </form>
-                </div>
-
-                {{-- JS for Star Rating --}}
-
-                @else
-                <p class="mt-3">{{ __('store.product_detail.please') }} <a href="{{ route('customer.login') }}">{{ __('store.product_detail.login') }}</a> {{ __('store.product_detail.submit') }}</p>
-                @endauth
-
-                {{-- Now Show Review List --}}
-                @if($product->reviews->isEmpty())
-                    <p>{{ __('store.product_detail.no_reviews_yet') }}</p>
-                @else
-                    <ul>
-                        @foreach($product->reviews as $review)
-                            @if($review->is_approved)
-                                <li>
-                                    <!-- Display Customer's Image -->
-                                    <div class="review-customer-info">
-                                        <img src="{{ $review->customer->profile_image
-                                                ? asset('storage/' . $review->customer->profile_image)
-                                                : 'https://ui-avatars.com/api/?name=' . urlencode($review->customer->name) . '&background=0D8ABC&color=fff&size=70' }}"
-                                            alt="{{ $review->customer->name }}" 
-                                            class="review-customer-avatar"
-                                            style="width:45px; height:45px; border-radius:50%; object-fit:cover;"/>  
-                                        <strong>{{ ucwords($review->customer->name) }}</strong>
-                                    </div>
-
-                                    <!-- Display Rating with Stars -->
-                                   <div class="review-rating">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <span style="color: {{ $i <= $review->rating ? 'gold' : '#ccc' }}">&#9733;</span>
-                                        @endfor
-                                        <span class="review-time">
-                                            @php
-                                                $created_at = \Carbon\Carbon::parse($review->created_at);
-                                                $diffInDays = $created_at->diffInDays(\Carbon\Carbon::now());
-                                            @endphp
-                                            ({{ $diffInDays }} {{ $diffInDays == 1 ? __('store.product_detail.day') : __('store.product_detail.days')  }} {{ __('store.product_detail.ago') }})
-                                        </span>
-                                    </div>
-
-                                    <!-- Display Review Text -->
-                                    @if($review->review)
-                                        <p>{{ $review->review }}</p>
-                                    @else
-                                        <p>{{ __('store.product_detail.no_review_text') }}</p>
-                                    @endif
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
-
-                        <!-- Display Average Rating -->
-                        <div class="average-rating">
-                            
-
-                            <div class="review-rating">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= floor($product->reviews_avg_rating))
-                                        <span style="color: gold">★</span>
-                                    @elseif($i == ceil($product->reviews_avg_rating) && ($product->reviews_avg_rating - floor($product->reviews_avg_rating)) >= 0.5)
-                                        <span style="color: gold">★</span>
-                                    @else
-                                        <span style="color: #ccc">★</span>
-                                    @endif
-                                @endfor
-                                {{ number_format($product->reviews_avg_rating, 1) }} <span>{{ __('store.product_detail.average_rating') }}</span>
-                            </div>
-                        </div>
-                @endif
-                </div> <!-- End div.product-detail-customer-review -->
+        <div class="tab-content tc-tabs__content" id="myTabContent">
+            <div class="tab-pane fade show active" id="description" role="tabpanel">
+                <div class="tc-tabs__body">{!! $product->translation->description !!}</div>
             </div>
-          </div>
+            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                <div class="tc-tabs__body">
+                    <div class="product-detail-customer-review">
+                        @auth('customer')
+                        <div class="tc-review-form mb-4">
+                            <h5>{{ __('store.product_detail.submit_review_title') }}</h5>
+                            <form action="{{ route('review.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="rating" id="rating-value" required>
+                                <div id="starWrapper" class="tc-star-picker">
+                                    <span class="star" data-value="1" style="color:#ccc; cursor:pointer;">★</span>
+                                    <span class="star" data-value="2" style="color:#ccc; cursor:pointer;">★</span>
+                                    <span class="star" data-value="3" style="color:#ccc; cursor:pointer;">★</span>
+                                    <span class="star" data-value="4" style="color:#ccc; cursor:pointer;">★</span>
+                                    <span class="star" data-value="5" style="color:#ccc; cursor:pointer;">★</span>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label>{{ __('store.product_detail.review_optional') }}</label>
+                                    <textarea name="review" class="form-control tc-input" rows="3"></textarea>
+                                </div>
+                                <button class="tc-btn tc-btn--gold">{{ __('store.product_detail.submit_review_btn') }}</button>
+                            </form>
+                        </div>
+                        @else
+                        <p class="mt-3">{{ __('store.product_detail.please') }} <a href="{{ route('customer.login') }}" class="tc-link">{{ __('store.product_detail.login') }}</a> {{ __('store.product_detail.submit') }}</p>
+                        @endauth
+
+                        @if($product->reviews->isEmpty())
+                            <p>{{ __('store.product_detail.no_reviews_yet') }}</p>
+                        @else
+                            <ul class="tc-reviews-list">
+                                @foreach($product->reviews as $review)
+                                    @if($review->is_approved)
+                                        <li class="tc-review-item">
+                                            <div class="review-customer-info">
+                                                <img src="{{ $review->customer->profile_image ? asset('storage/' . $review->customer->profile_image) : 'https://ui-avatars.com/api/?name=' . urlencode($review->customer->name) . '&background=d4af37&color=fff&size=70' }}" alt="{{ $review->customer->name }}" class="review-customer-avatar" style="width:40px; height:40px; border-radius:50%; object-fit:cover;" />
+                                                <strong>{{ ucwords($review->customer->name) }}</strong>
+                                            </div>
+                                            <div class="review-rating">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <span style="color: {{ $i <= $review->rating ? '#d4af37' : '#ccc' }}">&#9733;</span>
+                                                @endfor
+                                                <span class="review-time">
+                                                    @php
+                                                        $created_at = \Carbon\Carbon::parse($review->created_at);
+                                                        $diffInDays = $created_at->diffInDays(\Carbon\Carbon::now());
+                                                    @endphp
+                                                    ({{ $diffInDays }} {{ $diffInDays == 1 ? __('store.product_detail.day') : __('store.product_detail.days') }} {{ __('store.product_detail.ago') }})
+                                                </span>
+                                            </div>
+                                            @if($review->review)
+                                                <p>{{ $review->review }}</p>
+                                            @else
+                                                <p>{{ __('store.product_detail.no_review_text') }}</p>
+                                            @endif
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            <div class="average-rating">
+                                <div class="review-rating">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= floor($product->reviews_avg_rating))
+                                            <span style="color: #d4af37">★</span>
+                                        @elseif($i == ceil($product->reviews_avg_rating) && ($product->reviews_avg_rating - floor($product->reviews_avg_rating)) >= 0.5)
+                                            <span style="color: #d4af37">★</span>
+                                        @else
+                                            <span style="color: #ccc">★</span>
+                                        @endif
+                                    @endfor
+                                    {{ number_format($product->reviews_avg_rating, 1) }} <span>{{ __('store.product_detail.average_rating') }}</span>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
-
-      </div>
     </div>
-  </div>
-</div>
-
+</section>
 
 @endsection
 
