@@ -3184,6 +3184,89 @@ input[type="radio"]:checked + .tc-pdp__color{
 }
 .tc-checkout__gateway:hover{ border-color: #d4af37; }
 .tc-checkout__gateway input[type="radio"]{ accent-color: #d4af37; }
+.tc-checkout__gateway i{ font-size: 1.1rem; flex-shrink: 0; }
+
+/* ---- Payment Detail Panels ---- */
+.tc-checkout__payment-detail{
+    margin-bottom: 12px;
+    animation: tcSlideDown .3s ease;
+}
+@keyframes tcSlideDown{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+.tc-checkout__detail-box{
+    background: #f9f9f7;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: .88rem;
+    color: #555;
+    line-height: 1.6;
+}
+.tc-checkout__detail-box > i{ font-size: 1.2rem; margin-top: 2px; flex-shrink: 0; }
+.tc-checkout__detail-box p{ margin: 0; }
+.tc-checkout__detail-box--bank{
+    flex-direction: column;
+    gap: 0;
+}
+.tc-checkout__detail-heading{
+    font-family: 'Playfair Display', serif;
+    font-size: .95rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+}
+.tc-checkout__bank-row{
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+    font-size: .85rem;
+}
+.tc-checkout__bank-row:last-of-type{ border-bottom: none; }
+.tc-checkout__bank-row strong{ color: #555; font-weight: 600; }
+.tc-checkout__bank-row span{ color: #1a1a1a; font-weight: 600; font-family: 'Courier New', monospace; letter-spacing: .5px; }
+.tc-checkout__whatsapp-note{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(37,211,102,.06);
+    border: 1px solid rgba(37,211,102,.15);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 4px;
+}
+.tc-checkout__whatsapp-note > i{
+    font-size: 1.6rem;
+    color: #25d366;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.tc-checkout__whatsapp-note p{
+    margin: 0 0 8px;
+    font-size: .85rem;
+    color: #444;
+    line-height: 1.5;
+}
+.tc-checkout__whatsapp-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25d366;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .25s;
+}
+.tc-checkout__whatsapp-link:hover{ background: #1da851; color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,211,102,.3); }
+.tc-checkout__whatsapp-link i{ font-size: 1rem; }
 
 /* ---- Empty State ---- */
 .tc-empty-state{

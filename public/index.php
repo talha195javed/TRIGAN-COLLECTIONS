@@ -7,16 +7,31 @@ define('LARAVEL_START', microtime(true));
 
 /*
 |--------------------------------------------------------------------------
-| Check If The Application Is Under Maintenance
+| Determine Application Base Path
 |--------------------------------------------------------------------------
 |
-| If the application is in maintenance / demo mode via the "down" command
-| we will load this file so that any pre-rendered content can be shown
-| instead of starting the framework, which could cause an exception.
+| Supports two deployment layouts:
+| 1. Standard:  public/index.php  →  ../  (app root one level up)
+| 2. Namecheap: entire project inside public_html, index.php at root
+|    In this case bootstrap/app.php is in the same directory.
 |
 */
 
-if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+if (file_exists(__DIR__.'/../bootstrap/app.php')) {
+    // Standard layout: public/ is a subfolder of the project
+    $basePath = __DIR__.'/..';
+} else {
+    // Namecheap flat layout: everything is in public_html
+    $basePath = __DIR__;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Check If The Application Is Under Maintenance
+|--------------------------------------------------------------------------
+*/
+
+if (file_exists($maintenance = $basePath.'/storage/framework/maintenance.php')) {
     require $maintenance;
 }
 
@@ -24,27 +39,33 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 |--------------------------------------------------------------------------
 | Register The Auto Loader
 |--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| this application. We just need to utilize it! We'll simply require it
-| into the script here so we don't need to manually load our classes.
-|
 */
 
-require __DIR__.'/../vendor/autoload.php';
+require $basePath.'/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
 | Run The Application
 |--------------------------------------------------------------------------
+*/
+
+$app = require_once $basePath.'/bootstrap/app.php';
+
+/*
+|--------------------------------------------------------------------------
+| Override Public Path for Flat Layout
+|--------------------------------------------------------------------------
 |
-| Once we have the application, we can handle the incoming request using
-| the application's HTTP kernel. Then, we will send the response back
-| to this client's browser, allowing them to enjoy our application.
+| In the Namecheap flat layout, the public path is the same directory
+| as index.php (public_html/), not public_html/public/.
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+if ($basePath === __DIR__) {
+    $app->bind('path.public', function () {
+        return __DIR__;
+    });
+}
 
 $kernel = $app->make(Kernel::class);
 

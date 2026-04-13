@@ -101,6 +101,7 @@
                 </ul>
             </div>
         </li>
+        {{-- Hidden: Payments
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#paymentsMenu" role="button" aria-expanded="false" aria-controls="paymentsMenu">
                 <span><i class="fas fa-credit-card me-2"></i> <span>{{ __('cms.sidebar.payments.title') }}</span></span>
@@ -114,6 +115,8 @@
                 </ul>
             </div>
         </li>
+        --}}
+        {{-- Hidden: Refunds
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#refundsMenu" role="button" aria-expanded="false" aria-controls="refundsMenu">
                 <span><i class="fas fa-undo me-2"></i> <span>{{ __('cms.sidebar.refunds.title') }}</span></span>
@@ -127,6 +130,8 @@
                 </ul>
             </div>
         </li>
+        --}}
+        {{-- Hidden: Payment Gateways
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#gatewaysMenu" role="button" aria-expanded="false" aria-controls="gatewaysMenu">
                 <span><i class="fas fa-cogs me-2"></i> <span>{{ __('cms.sidebar.payment_gateways.title') }}</span></span>
@@ -140,6 +145,7 @@
                 </ul>
             </div>
         </li>
+        --}}
          <li class="nav-item">
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#productReviewMenu" role="button" aria-expanded="false" aria-controls="productReviewMenu">
                     <span><i class="fas fa-star me-2"></i> <span>{{ __('cms.sidebar.product_reviews.title') }}</span></span>
@@ -189,6 +195,7 @@
                 </ul>
             </div>
         </li>
+        {{-- Hidden: Social Media Links
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#socialMediaLinkMenu" role="button" aria-expanded="false" aria-controls="socialMediaLinkMenu">
                 <span><i class="fas fa-link me-2"></i> <span>{{ __('cms.sidebar.social_media_links.title') }}</span></span>
@@ -201,6 +208,8 @@
                 </ul>
             </div>
         </li>
+        --}}
+         {{-- Hidden: Pages
          <li class="nav-item">
         <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#pageMenu" role="button" aria-expanded="false" aria-controls="pageMenu">
             <span><i class="fas fa-file-alt me-2"></i> <span>{{ __('cms.sidebar.pages.title') }}</span></span>
@@ -221,6 +230,8 @@
             </ul>
         </div>
     </li>
+    --}}
+        {{-- Hidden: Site Settings
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#siteSettingsMenu" role="button" aria-expanded="false" aria-controls="siteSettingsMenu">
                 <span><i class="fas fa-cog me-2"></i> <span>{{ __('cms.sidebar.site_settings.title') }}</span></span>
@@ -232,5 +243,6 @@
                 </ul>
             </div>
         </li>
+        --}}
     </ul>
 </nav>

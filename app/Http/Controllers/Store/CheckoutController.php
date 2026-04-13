@@ -122,7 +122,7 @@ class CheckoutController extends Controller
     {
         $request->validate([
             'address' => 'required|string|max:255',
-            'payment_method' => 'required',
+            'payment_method' => 'required|string',
         ]);
 
         $cart = Session::get('cart', []);

@@ -20,7 +20,7 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-7">
-                    <form id="checkout-form" method="POST" action="{{ route('checkout.process') }}">
+                    <form id="checkout-form" method="POST" action="{{ route('checkout.store') }}">
                         @csrf
 
                         <div class="tc-checkout__card">
@@ -79,9 +79,57 @@
 
                         <div class="tc-checkout__card">
                             <h3 class="tc-checkout__card-title"><i class="fa-solid fa-credit-card me-2"></i>{{ __('store.checkout.payment_method') }}</h3>
+
+                            {{-- Cash on Delivery --}}
+                            <label class="tc-checkout__gateway">
+                                <input type="radio" name="payment_method" value="cod" required>
+                                <i class="fa-solid fa-money-bill-wave" style="color:#27ae60;"></i>
+                                <span>Cash on Delivery (COD)</span>
+                            </label>
+                            <div id="cod-info" class="tc-checkout__payment-detail" style="display:none;">
+                                <div class="tc-checkout__detail-box">
+                                    <i class="fa-solid fa-circle-check" style="color:#27ae60;"></i>
+                                    <p>Pay with cash when your order is delivered to your doorstep. No advance payment required.</p>
+                                </div>
+                            </div>
+
+                            {{-- Bank Transfer --}}
+                            <label class="tc-checkout__gateway">
+                                <input type="radio" name="payment_method" value="bank_transfer" required>
+                                <i class="fa-solid fa-building-columns" style="color:#2980b9;"></i>
+                                <span>Bank Transfer</span>
+                            </label>
+                            <div id="bank-info" class="tc-checkout__payment-detail" style="display:none;">
+                                <div class="tc-checkout__detail-box tc-checkout__detail-box--bank">
+                                    <h5 class="tc-checkout__detail-heading">Bank Account Details</h5>
+                                    <div class="tc-checkout__bank-row"><strong>Bank Name:</strong> <span>{{ config('checkout.bank_name', 'Meezan Bank') }}</span></div>
+                                    <div class="tc-checkout__bank-row"><strong>Account Title:</strong> <span>{{ config('checkout.bank_account_title', 'Trigan Collections') }}</span></div>
+                                    <div class="tc-checkout__bank-row"><strong>Account Number:</strong> <span>{{ config('checkout.bank_account_number', '02270106498671') }}</span></div>
+                                    <div class="tc-checkout__bank-row"><strong>IBAN:</strong> <span>{{ config('checkout.bank_iban', 'PK36MEZN0002270106498671') }}</span></div>
+                                    <hr style="border-color:rgba(0,0,0,.08); margin:14px 0;">
+                                    <div class="tc-checkout__whatsapp-note">
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                        <div>
+                                            <p>After transferring, send a <strong>screenshot</strong> of the payment receipt on WhatsApp:</p>
+                                            <a href="https://wa.me/{{ config('checkout.whatsapp_number', '923001234567') }}" target="_blank" class="tc-checkout__whatsapp-link">
+                                                <i class="fa-brands fa-whatsapp"></i> +{{ config('checkout.whatsapp_display', '92 300 1234567') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Dynamic gateways (PayPal, Stripe, etc.) --}}
                             @foreach($paymentGateways as $gateway)
                                 <label class="tc-checkout__gateway">
-                                    <input type="radio" name="gateway" value="{{ $gateway->code }}" id="gateway-{{ $gateway->id }}" required>
+                                    <input type="radio" name="payment_method" value="{{ $gateway->code }}" required>
+                                    @if($gateway->code === 'paypal')
+                                        <i class="fa-brands fa-paypal" style="color:#003087;"></i>
+                                    @elseif($gateway->code === 'stripe')
+                                        <i class="fa-brands fa-stripe" style="color:#635bff;"></i>
+                                    @else
+                                        <i class="fa-solid fa-credit-card" style="color:#d4af37;"></i>
+                                    @endif
                                     <span>{{ $gateway->name }}</span>
                                 </label>
                                 @if($gateway->code === 'paypal')
@@ -172,7 +220,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     },
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function(details) {
-                            fetch("{{ route('checkout.process') }}", {
+                            fetch("{{ route('checkout.store') }}", {
                                 method: "POST",
                                 headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
                                 body: JSON.stringify({
@@ -194,34 +242,45 @@ document.addEventListener("DOMContentLoaded", async () => {
 <script src="https://js.stripe.com/v3/"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const gatewayRadios = document.querySelectorAll('input[name="gateway"]');
+    const radios = document.querySelectorAll('input[name="payment_method"]');
     const paypalContainer = document.getElementById("paypal-button-container");
     const stripeContainer = document.getElementById("card-element");
+    const codInfo = document.getElementById("cod-info");
+    const bankInfo = document.getElementById("bank-info");
     const placeOrderBtn = document.getElementById("place-order");
 
-    let stripe = Stripe("asdasd");
-    let elements = stripe.elements();
-    let card = elements.create("card");
-    card.mount("#card-element");
+    let stripe, elements, card;
+    try {
+        stripe = Stripe("{{ $paymentGateways->firstWhere('code','stripe')?->getConfigValue('publishable_key','sandbox') ?? '' }}");
+        elements = stripe.elements();
+        card = elements.create("card");
+        card.mount("#card-element");
+    } catch(e) { console.log("Stripe not configured"); }
 
-    // Show correct payment fields
-    gatewayRadios.forEach(radio => {
+    function hideAllDetails() {
+        if (paypalContainer) paypalContainer.style.display = "none";
+        if (stripeContainer) stripeContainer.style.display = "none";
+        if (codInfo) codInfo.style.display = "none";
+        if (bankInfo) bankInfo.style.display = "none";
+    }
+
+    radios.forEach(radio => {
         radio.addEventListener("change", function () {
-            if (this.value === "paypal") {
+            hideAllDetails();
+            if (this.value === "cod" && codInfo) {
+                codInfo.style.display = "block";
+            } else if (this.value === "bank_transfer" && bankInfo) {
+                bankInfo.style.display = "block";
+            } else if (this.value === "paypal" && paypalContainer) {
                 paypalContainer.style.display = "block";
-                stripeContainer.style.display = "none";
-            } else if (this.value === "stripe") {
+            } else if (this.value === "stripe" && stripeContainer) {
                 stripeContainer.style.display = "block";
-                paypalContainer.style.display = "none";
-            } else {
-                paypalContainer.style.display = "none";
-                stripeContainer.style.display = "none";
             }
         });
     });
 
     // PayPal integration
-    if (typeof paypal !== "undefined") {
+    if (typeof paypal !== "undefined" && paypalContainer) {
         paypal.Buttons({
             createOrder: function (data, actions) {
                 return actions.order.create({
@@ -230,15 +289,14 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             onApprove: function (data, actions) {
                 return actions.order.capture().then(function (details) {
-                    // Send to backend
-                    fetch("{{ route('checkout.process') }}", {
+                    fetch("{{ route('checkout.store') }}", {
                         method: "POST",
                         headers: {
                             "X-CSRF-TOKEN": "{{ csrf_token() }}",
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            gateway: "paypal",
+                            payment_method: "paypal",
                             order_id: data.orderID,
                             details: details
                         })
@@ -250,27 +308,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }).render("#paypal-button-container");
     }
 
-    // Stripe integration
+    // Form submission
     const form = document.getElementById("checkout-form");
     form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        let selectedGateway = document.querySelector('input[name="gateway"]:checked').value;
+        const selected = document.querySelector('input[name="payment_method"]:checked');
+        if (!selected) { alert("Please select a payment method"); return; }
 
-        if (selectedGateway === "stripe") {
+        const method = selected.value;
+
+        if (method === "stripe" && stripe && card) {
             const {paymentMethod, error} = await stripe.createPaymentMethod({
                 type: "card",
                 card: card,
             });
-
             if (error) {
                 document.getElementById("card-errors").textContent = error.message;
             } else {
-                // Send paymentMethod.id + form data to backend
                 let formData = new FormData(form);
                 formData.append("payment_method_id", paymentMethod.id);
-
-                fetch("{{ route('checkout.process') }}", {
+                fetch("{{ route('checkout.store') }}", {
                     method: "POST",
                     headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
                     body: formData
@@ -278,9 +336,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.href = "/thank-you";
                 });
             }
-        } else if (selectedGateway === "paypal") {
-            alert("Please complete payment with PayPal button");
+        } else if (method === "paypal") {
+            alert("Please complete payment with the PayPal button above.");
         } else {
+            // COD, bank_transfer, or any other → normal form submit
             form.submit();
         }
     });
