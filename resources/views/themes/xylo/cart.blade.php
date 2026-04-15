@@ -47,6 +47,7 @@
                                                     ? \App\Models\ProductVariant::with('images')->find($item['variant_id'])
                                                     : \App\Models\ProductVariant::where('product_id', $item['product_id'])->where('is_primary', true)->first();
                                         $subtotal = $item['price'] * $item['quantity'];
+                                        $symbol = $variant->getCurrencySymbol();
                                     @endphp
                                     <tr>
                                         <td>
@@ -79,9 +80,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td><strong>{{ $currency->symbol }}{{ number_format($item['price'], 2) }}</strong></td>
+                                        <td><strong>{{ $symbol }}{{ number_format($item['price'], 2) }}</strong></td>
                                         <td><input type="number" class="tc-cart__qty-input" value="{{ $item['quantity'] }}" min="1" data-id="{{ $key }}"></td>
-                                        <td><strong>{{ $currency->symbol }}{{ number_format($subtotal, 2) }}</strong></td>
+                                        <td><strong>{{ $symbol }}{{ number_format($subtotal, 2) }}</strong></td>
                                     </tr>
                                     @php $total += $subtotal; @endphp
                                 @endforeach
@@ -100,7 +101,7 @@
                         <h3 class="tc-cart__summary-title">{{ __('store.cart.cart_totals') }}</h3>
                         <div class="tc-cart__summary-row">
                             <span>{{ __('store.cart.subtotal_label') }}</span>
-                            <span>{{ $currency->symbol }}{{ number_format($total, 2) }}</span>
+                            <span>{{ $variant->getCurrencySymbol() }}{{ number_format($total, 2) }}</span>
                         </div>
 
                         @php
@@ -117,7 +118,7 @@
                         <div class="tc-cart__summary-row">
                             <span>Discount ({{ $coupon['code'] }})</span>
                             <span class="d-flex align-items-center gap-2">
-                                -{{ $currency->symbol }}{{ number_format($discountAmount, 2) }}
+                                -{{ $variant->getCurrencySymbol() }}{{ number_format($discountAmount, 2) }}
                                 <form id="removeCouponForm">@csrf
                                     <button type="submit" class="tc-cart__coupon-remove" title="Remove">x</button>
                                 </form>
@@ -127,7 +128,7 @@
 
                         <div class="tc-cart__summary-row tc-cart__summary-row--total">
                             <span>{{ __('store.cart.total_label') }}</span>
-                            <span>{{ $currency->symbol }}{{ number_format($finalTotal, 2) }}</span>
+                            <span>{{ $variant->getCurrencySymbol() }}{{ number_format($finalTotal, 2) }}</span>
                         </div>
                         <a href="{{ route('checkout.index') }}" class="tc-btn tc-btn--gold w-100 justify-content-center mt-3">{{ __('store.cart.proceed_to_checkout') }}</a>
                     </div>

@@ -152,9 +152,13 @@
                 <div class="col-lg-5">
                     <div class="tc-cart__summary tc-cart__summary--sticky">
                         <h3 class="tc-cart__summary-title">{{ __('store.checkout.order_summary') }}</h3>
+                        @php
+                            $sampleVariant = new \App\Models\ProductVariant();
+                            $symbol = $sampleVariant->getCurrencySymbol();
+                        @endphp
                         <div class="tc-cart__summary-row">
                             <span>{{ __('store.checkout.subtotal') }}</span>
-                            <span>${{ number_format($subtotal, 2) }}</span>
+                            <span>{{ $symbol }}{{ number_format($subtotal, 2) }}</span>
                         </div>
                         <div class="tc-cart__summary-row">
                             <span>{{ __('store.checkout.shipping') }}</span>
@@ -162,7 +166,7 @@
                         </div>
                         <div class="tc-cart__summary-row tc-cart__summary-row--total">
                             <span>{{ __('store.checkout.total') }}</span>
-                            <span>${{ number_format($total, 2) }}</span>
+                            <span>{{ $symbol }}{{ number_format($total, 2) }}</span>
                         </div>
                     </div>
                 </div>

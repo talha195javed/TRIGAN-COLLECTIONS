@@ -133,9 +133,15 @@
                         </div>
                         <h3 class="tc-pcard__name"><a href="{{ route('product.show', $product->slug) }}">{{ $product->translation->name ?? 'Product Name Not Available' }}</a></h3>
                         <div class="tc-pcard__price">
-                            <span class="tc-pcard__price-now {{ optional($product->primaryVariant)->converted_discount_price ? 'tc-pcard__price-now--old' : '' }}">{{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}</span>
+                            <span class="tc-pcard__price-now {{ optional($product->primaryVariant)->converted_discount_price ? 'tc-pcard__price-now--old' : '' }}">
+                                @php
+                                    $variant = $product->primaryVariant;
+                                    $symbol = $variant ? $variant->getCurrencySymbol() : '$';
+                                @endphp
+                                {{ $symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
+                            </span>
                             @if(optional($product->primaryVariant)->converted_discount_price)
-                            <span class="tc-pcard__price-sale">{{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}</span>
+                            <span class="tc-pcard__price-sale">{{ $symbol }}{{ $product->primaryVariant->converted_discount_price }}</span>
                             @endif
                         </div>
                     </div>
@@ -198,9 +204,15 @@
                             </div>
                             <h3 class="tc-pcard__name"><a href="{{ route('product.show', $product->slug) }}">{{ $product->translation->name ?? 'Product Name Not Available' }}</a></h3>
                             <div class="tc-pcard__price">
-                                <span class="tc-pcard__price-now {{ optional($product->primaryVariant)->converted_discount_price ? 'tc-pcard__price-now--old' : '' }}">{{ $currency->symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}</span>
+                                <span class="tc-pcard__price-now {{ optional($product->primaryVariant)->converted_discount_price ? 'tc-pcard__price-now--old' : '' }}">
+                                    @php
+                                        $variant = $product->primaryVariant;
+                                        $symbol = $variant ? $variant->getCurrencySymbol() : '$';
+                                    @endphp
+                                    {{ $symbol }}{{ optional($product->primaryVariant)->converted_price ?? 'N/A' }}
+                                </span>
                                 @if(optional($product->primaryVariant)->converted_discount_price)
-                                <span class="tc-pcard__price-sale">{{ $currency->symbol }}{{ $product->primaryVariant->converted_discount_price }}</span>
+                                <span class="tc-pcard__price-sale">{{ $symbol }}{{ $product->primaryVariant->converted_discount_price }}</span>
                                 @endif
                             </div>
                         </div>

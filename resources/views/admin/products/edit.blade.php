@@ -95,14 +95,52 @@
                                    placeholder="Variant Name (EN)">
                         </div>
             
-                        <div class="col-md-4">
-                            <label>{{ __('cms.products.price') }}</label>
+                        <div class="col-md-12 mb-3">
+                            <h6 class="text-primary">Pricing (All Currencies)</h6>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.price') }} (USD)</label>
                             <input type="number" step="0.01" name="variants[{{ $index }}][price]" class="form-control" value="{{ $variant->price }}" />
                         </div>
                         
-                        <div class="col-md-4">
-                            <label>{{ __('cms.products.discount_price') }}</label>
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.price') }} (AED)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][price_aed]" class="form-control" value="{{ $variant->price_aed }}" />
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.price') }} (LKR)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][price_lkr]" class="form-control" value="{{ $variant->price_lkr }}" />
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.price') }} (GBP)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][price_gbp]" class="form-control" value="{{ $variant->price_gbp }}" />
+                        </div>
+                        
+                        <div class="col-md-12 mb-3 mt-3">
+                            <h6 class="text-primary">Discount Prices (Optional)</h6>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.discount_price') }} (USD)</label>
                             <input type="number" step="0.01" name="variants[{{ $index }}][discount_price]" class="form-control" value="{{ $variant->discount_price }}" />
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.discount_price') }} (AED)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][discount_price_aed]" class="form-control" value="{{ $variant->discount_price_aed }}" />
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.discount_price') }} (LKR)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][discount_price_lkr]" class="form-control" value="{{ $variant->discount_price_lkr }}" />
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label>{{ __('cms.products.discount_price') }} (GBP)</label>
+                            <input type="number" step="0.01" name="variants[{{ $index }}][discount_price_gbp]" class="form-control" value="{{ $variant->discount_price_gbp }}" />
                         </div>
             
                         <div class="col-md-4 mt-2">
