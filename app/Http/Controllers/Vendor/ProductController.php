@@ -82,7 +82,13 @@ class ProductController extends Controller
             'variants' => 'required|array|min:1',
             'variants.*.name' => 'required|string|max:255',
             'variants.*.price' => 'required|numeric|min:0',
-            'variants.*.discount_price' => 'nullable|numeric|min:0|lte:variants.*.price',
+            'variants.*.price_aed' => 'nullable|numeric|min:0',
+            'variants.*.price_lkr' => 'nullable|numeric|min:0',
+            'variants.*.price_gbp' => 'nullable|numeric|min:0',
+            'variants.*.discount_price' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_aed' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_lkr' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_gbp' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
             'variants.*.SKU' => 'required|string|max:255',
             'variants.*.barcode' => 'nullable|string|max:255',
@@ -98,6 +104,30 @@ class ProductController extends Controller
         $rules['translations.en.description'] = 'required|string|min:5';
 
         $validated = $request->validate($rules);
+
+        // Custom validation for discount prices
+        foreach ($request->variants as $index => $variant) {
+            if (isset($variant['discount_price']) && isset($variant['price']) && $variant['discount_price'] > $variant['price']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price" => 'Discount price cannot be greater than regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_aed']) && isset($variant['price_aed']) && $variant['discount_price_aed'] > $variant['price_aed']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_aed" => 'AED discount price cannot be greater than AED regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_lkr']) && isset($variant['price_lkr']) && $variant['discount_price_lkr'] > $variant['price_lkr']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_lkr" => 'LKR discount price cannot be greater than LKR regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_gbp']) && isset($variant['price_gbp']) && $variant['discount_price_gbp'] > $variant['price_gbp']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_gbp" => 'GBP discount price cannot be greater than GBP regular price'
+                ])->withInput();
+            }
+        }
 
         DB::transaction(function () use ($request, $defaultLang, $vendorId) {
             $defaultName = $request->translations['en']['name'] ?? 'product';
@@ -136,7 +166,13 @@ class ProductController extends Controller
                 $variant = $product->variants()->create([
                     'variant_slug' => Str::slug($variantData['name']).'-'.uniqid(),
                     'price' => $variantData['price'],
+                    'price_aed' => $variantData['price_aed'] ?? null,
+                    'price_lkr' => $variantData['price_lkr'] ?? null,
+                    'price_gbp' => $variantData['price_gbp'] ?? null,
                     'discount_price' => $variantData['discount_price'] ?? null,
+                    'discount_price_aed' => $variantData['discount_price_aed'] ?? null,
+                    'discount_price_lkr' => $variantData['discount_price_lkr'] ?? null,
+                    'discount_price_gbp' => $variantData['discount_price_gbp'] ?? null,
                     'stock' => $variantData['stock'],
                     'SKU' => $variantData['SKU'],
                     'barcode' => $variantData['barcode'] ?? null,
@@ -233,7 +269,13 @@ class ProductController extends Controller
             'variants' => 'required|array|min:1',
             'variants.*.name' => 'required|string|max:255',
             'variants.*.price' => 'required|numeric|min:0',
-            'variants.*.discount_price' => 'nullable|numeric|min:0|lte:variants.*.price',
+            'variants.*.price_aed' => 'nullable|numeric|min:0',
+            'variants.*.price_lkr' => 'nullable|numeric|min:0',
+            'variants.*.price_gbp' => 'nullable|numeric|min:0',
+            'variants.*.discount_price' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_aed' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_lkr' => 'nullable|numeric|min:0',
+            'variants.*.discount_price_gbp' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
             'variants.*.SKU' => 'required|string|max:255',
             'variants.*.barcode' => 'nullable|string|max:255',
@@ -243,6 +285,30 @@ class ProductController extends Controller
             'variants.*.size_id' => 'nullable|exists:attribute_values,id',
             'variants.*.color_id' => 'nullable|exists:attribute_values,id',
         ]);
+
+        // Custom validation for discount prices
+        foreach ($request->variants as $index => $variant) {
+            if (isset($variant['discount_price']) && isset($variant['price']) && $variant['discount_price'] > $variant['price']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price" => 'Discount price cannot be greater than regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_aed']) && isset($variant['price_aed']) && $variant['discount_price_aed'] > $variant['price_aed']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_aed" => 'AED discount price cannot be greater than AED regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_lkr']) && isset($variant['price_lkr']) && $variant['discount_price_lkr'] > $variant['price_lkr']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_lkr" => 'LKR discount price cannot be greater than LKR regular price'
+                ])->withInput();
+            }
+            if (isset($variant['discount_price_gbp']) && isset($variant['price_gbp']) && $variant['discount_price_gbp'] > $variant['price_gbp']) {
+                return back()->withErrors([
+                    "variants.{$index}.discount_price_gbp" => 'GBP discount price cannot be greater than GBP regular price'
+                ])->withInput();
+            }
+        }
 
         DB::transaction(function () use ($request, $product, $defaultLang) {
             $product->update([
@@ -292,7 +358,13 @@ class ProductController extends Controller
                 $variant = $product->variants()->create([
                     'variant_slug' => Str::slug($variantData['name']).'-'.uniqid(),
                     'price' => $variantData['price'],
+                    'price_aed' => $variantData['price_aed'] ?? null,
+                    'price_lkr' => $variantData['price_lkr'] ?? null,
+                    'price_gbp' => $variantData['price_gbp'] ?? null,
                     'discount_price' => $variantData['discount_price'] ?? null,
+                    'discount_price_aed' => $variantData['discount_price_aed'] ?? null,
+                    'discount_price_lkr' => $variantData['discount_price_lkr'] ?? null,
+                    'discount_price_gbp' => $variantData['discount_price_gbp'] ?? null,
                     'stock' => $variantData['stock'],
                     'SKU' => $variantData['SKU'],
                     'barcode' => $variantData['barcode'] ?? null,

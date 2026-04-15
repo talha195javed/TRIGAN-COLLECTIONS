@@ -100,11 +100,9 @@
                     <form action="{{ route('change.currency') }}" method="POST">
                         @csrf
                         <select name="currency_code" class="tc-header__currency" onchange="this.form.submit()">
-                            @foreach (\App\Models\Currency::all() as $currency)
-                                <option value="{{ $currency->code }}" {{ session('currency', 'USD') == $currency->code ? 'selected' : '' }}>
-                                    {{ strtoupper($currency->code) }}
-                                </option>
-                            @endforeach
+                            <option value="AED" {{ session('currency', 'AED') == 'AED' ? 'selected' : '' }}>AED</option>
+                            <option value="LKR" {{ session('currency', 'AED') == 'LKR' ? 'selected' : '' }}>LKR</option>
+                            <option value="GBP" {{ session('currency', 'AED') == 'GBP' ? 'selected' : '' }}>GBP</option>
                         </select>
                     </form>
 

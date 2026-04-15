@@ -42,7 +42,13 @@
 
                         <div class="tc-filter__group">
                             <h6 class="tc-filter__title">{{ __('store.shop.price') }}</h6>
-                            <p id="priceRange" class="tc-filter__range-text">{{ $currency->symbol }}<span id="minPriceText">0</span> — {{ $currency->symbol }}<span id="maxPriceText">1000</span></p>
+                            <p id="priceRange" class="tc-filter__range-text">
+    @php
+        $sampleVariant = new \App\Models\ProductVariant();
+        $symbol = $sampleVariant->getCurrencySymbol();
+    @endphp
+    {{ $symbol }}<span id="minPriceText">0</span> - {{ $symbol }}<span id="maxPriceText">1000</span>
+</p>
                             <div class="tc-filter__range">
                                 <input type="range" name="price_min" id="minPrice" min="0" max="1000" value="0" step="10">
                                 <input type="range" name="price_max" id="maxPrice" min="0" max="1000" value="1000" step="10">
