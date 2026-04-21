@@ -1,6 +1,19 @@
 @extends('themes.xylo.layouts.master')
 @section('content')
-    @php $currency = activeCurrency(); @endphp
+    @php
+        $currency = activeCurrency();
+
+        // Custom function to generate correct storage URLs
+        function storageUrl($path) {
+            // Use the current request to get the correct base URL
+            $baseUrl = request()->getSchemeAndHttpHost();
+            // If running on localhost with port, ensure port is included
+            if (str_contains($baseUrl, 'localhost') || str_contains($baseUrl, '127.0.0.1')) {
+                $baseUrl = 'http://127.0.0.1:8000';
+            }
+            return $baseUrl . '/storage/' . ltrim($path, '/');
+        }
+    @endphp
 
     {{-- ========== HERO ========== --}}
     <section class="tc-hero">
@@ -32,7 +45,7 @@
                                 </div>
                                 <div class="col-lg-6 order-lg-2 order-1">
                                     <div class="tc-hero__visual">
-                                        <img src="{{ Storage::url(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="tc-hero__img" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
+                                        <img src="{{ storageUrl(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="tc-hero__img" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +101,7 @@
                     <div class="tc-catcard">
                         <a href="{{ route('category.show', $category->slug) }}">
                             <div class="tc-catcard__visual">
-                                <img src="{{ Storage::url(optional($category->translation)->image_url ?? 'default.jpg') }}" alt="{{ $category->translation->name ?? 'No Translation' }}">
+                                <img src="{{ storageUrl(optional($category->translation)->image_url ?? 'default.jpg') }}" alt="{{ $category->translation->name ?? 'No Translation' }}">
                             </div>
                             <div class="tc-catcard__body">
                                 <h3>{{ $category->translation->name ?? 'No Translation' }}</h3>
@@ -119,7 +132,7 @@
                 @foreach ($products as $product)
                 <div class="tc-pcard">
                     <div class="tc-pcard__visual">
-                        <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
+                        <img src="{{ storageUrl(optional($product->thumbnail)->image_url ?? $product->image_url) }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
                         <button class="tc-pcard__wish wishlist-btn" data-product-id="{{ $product->id }}"><i class="fa-solid fa-heart"></i></button>
                         <div class="tc-pcard__overlay">
                             <a href="{{ route('product.show', $product->slug) }}" class="tc-pcard__action"><i class="fa-solid fa-eye"></i></a>
@@ -169,7 +182,7 @@
                     </div>
                     <div class="col-lg-5 d-none d-lg-block">
                         <div class="tc-promo__visual">
-                            <img src="assets/images/homesale-banner.png" alt="Sale Banner">
+                            <img src="{{ storageUrl('banners/shoes-ready.png') }}" alt="Sale Banner">
                         </div>
                     </div>
                 </div>
@@ -190,7 +203,7 @@
                 <div class="col-xl-3 col-lg-4 col-md-4 col-6">
                     <div class="tc-pcard">
                         <div class="tc-pcard__visual">
-                            <img src="{{ Storage::url(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
+                            <img src="{{ storageUrl(optional($product->thumbnail)->image_url ?? 'default.jpg') }}" alt="{{ $product->translation->name ?? 'Product Name Not Available' }}">
                             <button class="tc-pcard__wish wishlist-btn" data-product-id="{{ $product->id }}"><i class="fa-solid fa-heart"></i></button>
                             <div class="tc-pcard__overlay">
                                 <a href="{{ route('product.show', $product->slug) }}" class="tc-pcard__action"><i class="fa-solid fa-eye"></i></a>
