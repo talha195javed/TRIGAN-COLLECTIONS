@@ -16,7 +16,10 @@
         </div>
     </section>
 
-    @php $total = 0; @endphp
+    @php
+        $total = 0;
+        $summarySymbol = $currency->symbol ?? session('currency', 'AED');
+    @endphp
     <section class="tc-cart">
         <div class="container">
             <div class="row g-4">
@@ -101,7 +104,7 @@
                         <h3 class="tc-cart__summary-title">{{ __('store.cart.cart_totals') }}</h3>
                         <div class="tc-cart__summary-row">
                             <span>{{ __('store.cart.subtotal_label') }}</span>
-                            <span>{{ $variant->getCurrencySymbol() }}{{ number_format($total, 2) }}</span>
+                            <span>{{ $summarySymbol }}{{ number_format($total, 2) }}</span>
                         </div>
 
                         @php
@@ -118,7 +121,7 @@
                         <div class="tc-cart__summary-row">
                             <span>Discount ({{ $coupon['code'] }})</span>
                             <span class="d-flex align-items-center gap-2">
-                                -{{ $variant->getCurrencySymbol() }}{{ number_format($discountAmount, 2) }}
+                                -{{ $summarySymbol }}{{ number_format($discountAmount, 2) }}
                                 <form id="removeCouponForm">@csrf
                                     <button type="submit" class="tc-cart__coupon-remove" title="Remove">x</button>
                                 </form>
@@ -128,11 +131,14 @@
 
                         <div class="tc-cart__summary-row tc-cart__summary-row--total">
                             <span>{{ __('store.cart.total_label') }}</span>
-                            <span>{{ $variant->getCurrencySymbol() }}{{ number_format($finalTotal, 2) }}</span>
+                            <span>{{ $summarySymbol }}{{ number_format($finalTotal, 2) }}</span>
                         </div>
-                        <a href="{{ route('checkout.index') }}" class="tc-btn tc-btn--gold w-100 justify-content-center mt-3">{{ __('store.cart.proceed_to_checkout') }}</a>
+                        @if(!empty($cart))
+                            <a href="{{ route('checkout.index') }}" class="tc-btn tc-btn--gold w-100 justify-content-center mt-3">{{ __('store.cart.proceed_to_checkout') }}</a>
+                        @endif
                     </div>
 
+                    @if(!empty($cart))
                     <div class="tc-cart__coupon">
                         <h4 class="tc-cart__coupon-title">{{ __('store.cart.coupon_heading') }}</h4>
                         <form id="applyCouponForm">
@@ -141,6 +147,7 @@
                             <button type="submit" class="tc-btn tc-btn--outline w-100 justify-content-center mt-2">{{ __('store.cart.apply_coupon') }}</button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -1,4 +1,188 @@
 @extends('themes.xylo.layouts.master')
+@section('css')
+<style>
+    .noon-home-hero {
+        background: #f7f7f7;
+        padding: 18px 0 24px;
+    }
+
+    .noon-home-hero__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(280px, .8fr);
+        grid-template-rows: 210px 210px;
+        gap: 14px;
+    }
+
+    .noon-home-hero__banner,
+    .noon-home-hero__deal {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 10px 28px rgba(0,0,0,.10);
+    }
+
+    .noon-home-hero__banner {
+        grid-row: 1 / span 2;
+        min-height: 434px;
+        display: flex;
+        align-items: center;
+        padding: 42px;
+    }
+
+    .noon-home-hero__content {
+        max-width: 520px;
+        color: #fff;
+    }
+
+    .noon-home-hero__tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: #ffd60a;
+        color: #111;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        margin-bottom: 16px;
+    }
+
+    .noon-home-hero__content h1 {
+        font-size: clamp(34px, 5vw, 66px);
+        line-height: .98;
+        font-weight: 900;
+        letter-spacing: -.05em;
+        margin: 0 0 16px;
+    }
+
+    .noon-home-hero__content p {
+        max-width: 450px;
+        font-size: 17px;
+        line-height: 1.65;
+        color: rgba(255,255,255,.86);
+        margin: 0 0 24px;
+    }
+
+    .noon-home-hero__deal {
+        display: flex;
+        align-items: flex-end;
+        min-height: 210px;
+        padding: 22px;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .noon-home-hero__deal:hover {
+        color: #fff;
+    }
+
+    .noon-home-hero__deal span {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: rgba(255,255,255,.76);
+    }
+
+    .noon-home-hero__deal strong {
+        display: block;
+        font-size: 24px;
+        line-height: 1.08;
+    }
+
+    .noon-home-hero__quick {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .noon-home-hero__quick a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 58px;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,.06);
+        color: #111;
+        text-decoration: none;
+        font-weight: 800;
+        box-shadow: 0 8px 22px rgba(0,0,0,.055);
+    }
+
+    .noon-home-hero__quick i {
+        color: #c99b00;
+    }
+
+    @media (max-width: 991.98px) {
+        .noon-home-hero__grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+        }
+
+        .noon-home-hero__banner {
+            grid-row: auto;
+            min-height: 420px;
+        }
+
+        .noon-home-hero__quick {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .noon-home-hero {
+            padding: 10px 0 16px;
+        }
+
+        .noon-home-hero__grid {
+            gap: 10px;
+        }
+
+        .noon-home-hero__banner {
+            min-height: 360px;
+            padding: 24px;
+            border-radius: 12px;
+            background-position: center right;
+        }
+
+        .noon-home-hero__content h1 {
+            font-size: 34px;
+        }
+
+        .noon-home-hero__content p {
+            font-size: 14px;
+            max-width: 300px;
+        }
+
+        .noon-home-hero__deal {
+            min-height: 150px;
+            border-radius: 12px;
+        }
+
+        .noon-home-hero__deal strong {
+            font-size: 20px;
+        }
+
+        .noon-home-hero__quick {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .noon-home-hero__quick a {
+            min-height: 50px;
+            font-size: 13px;
+        }
+    }
+</style>
+@endsection
 @section('content')
     @php
         $currency = activeCurrency();
@@ -16,47 +200,38 @@
     @endphp
 
     {{-- ========== HERO ========== --}}
-    <section class="tc-hero">
-        <div class="tc-hero__bg-shapes">
-            <div class="tc-hero__shape tc-hero__shape--1"></div>
-            <div class="tc-hero__shape tc-hero__shape--2"></div>
-            <div class="tc-hero__shape tc-hero__shape--3"></div>
-        </div>
-        <div class="container position-relative" style="z-index:3">
-            <div class="tc-hero__surface">
-                <div class="banner-slider">
-                    @foreach ($banners as $banner)
-                    <div>
-                        <div class="tc-hero__slide">
-                            <div class="row align-items-center g-5">
-                                <div class="col-lg-6 order-lg-1 order-2">
-                                    <span class="tc-pill">Trigan Collections</span>
-                                    <h1 class="tc-hero__heading">{{ $banner->translation ? $banner->translation->title : $banner->title }}</h1>
-                                    <p class="tc-hero__text">{{ __('store.home.banner_text') }}</p>
-                                    <div class="d-flex gap-3 flex-wrap">
-                                        <a href="{{ route('shop.index') }}" class="tc-btn tc-btn--gold">
-                                            {{ __('store.home.shop_now') }}
-                                            <i class="fa-solid fa-arrow-right"></i>
-                                        </a>
-                                        <a href="{{ route('xylo.about') }}" class="tc-btn tc-btn--outline">
-                                            About Us
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 order-lg-2 order-1">
-                                    <div class="tc-hero__visual">
-                                        <img src="{{ storageUrl(optional($banner->translation)->image_url ?? 'default.jpg') }}" class="tc-hero__img" alt="{{ $banner->translation ? $banner->translation->title : $banner->title }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <section class="noon-home-hero">
+        <div class="container">
+            <div class="noon-home-hero__grid">
+                <div class="noon-home-hero__banner" style="background-image: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.45) 45%, rgba(0,0,0,.10) 100%), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1500&q=85');">
+                    <div class="noon-home-hero__content">
+                        <span class="noon-home-hero__tag">Mega fashion sale</span>
+                        <h1>Big deals on fashion, shoes and accessories.</h1>
+                        <p>Shop fresh styles, daily offers, and fast delivery from Trigan Collections.</p>
+                        <a href="{{ route('shop.index') }}" class="tc-btn tc-btn--gold">
+                            Shop Now <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
-                    @endforeach
                 </div>
-                <div class="tc-hero-arrows" aria-label="Hero slider navigation">
-                    <button type="button" class="tc-hero-prev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button type="button" class="tc-hero-next" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
+                <a href="{{ route('shop.index') }}" class="noon-home-hero__deal" style="background-image: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.68)), url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85');">
+                    <div>
+                        <span>Footwear deals</span>
+                        <strong>Up to 40% off</strong>
+                    </div>
+                </a>
+                <a href="{{ route('shop.index') }}" class="noon-home-hero__deal" style="background-image: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.68)), url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=85');">
+                    <div>
+                        <span>New arrivals</span>
+                        <strong>Trending now</strong>
+                    </div>
+                </a>
+            </div>
+            <div class="noon-home-hero__quick">
+                <a href="{{ route('shop.index') }}"><i class="fa-solid fa-shirt"></i><span>Fashion</span></a>
+                <a href="{{ route('shop.index') }}"><i class="fa-solid fa-shoe-prints"></i><span>Shoes</span></a>
+                <a href="{{ route('shop.index') }}"><i class="fa-solid fa-tags"></i><span>Deals</span></a>
+                <a href="{{ route('shop.index') }}"><i class="fa-solid fa-truck-fast"></i><span>Fast Delivery</span></a>
+                <a href="{{ route('shop.index') }}"><i class="fa-solid fa-star"></i><span>New In</span></a>
             </div>
         </div>
     </section>

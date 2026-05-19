@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\OrderDetail;
 use App\Models\PaymentGateway;
 use App\Models\ProductVariant;
 use App\Services\Store\OrderService;
@@ -138,22 +138,21 @@ class CheckoutController extends Controller
 
         // Save Order
         $order = Order::create([
-            'user_id' => Auth::id(),
-            'address' => $request->address,
+            'customer_id' => Auth::guard('customer')->id(),
+            'guest_email' => Auth::guard('customer')->check() ? null : $request->input('email'),
+            'shipping_address' => $request->address,
             'payment_method' => $request->payment_method,
-            'total' => $total,
+            'total_amount' => $total,
             'status' => 'pending',
         ]);
 
         // Save Order Items
         foreach ($cart as $item) {
-            OrderItem::create([
+            OrderDetail::create([
                 'order_id' => $order->id,
                 'product_id' => $item['product_id'],
-                'variant_id' => $item['variant_id'] ?? null,
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
-                'attributes' => json_encode($item['attributes']),
             ]);
         }
 

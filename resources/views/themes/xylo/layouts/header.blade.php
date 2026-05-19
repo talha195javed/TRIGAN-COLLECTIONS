@@ -1,4 +1,4 @@
-<header class="tc-header sticky-top">
+<header class="tc-header sticky-top" style="background-color: yellow !important;">
     @php
         $wishlistCount = 0;
         if (auth('customer')->check()) {

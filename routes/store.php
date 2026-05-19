@@ -46,6 +46,7 @@ Route::get('/get-variant-price', [ProductController::class, 'getVariantPrice'])-
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('/thank-you', function () { return view('themes.xylo.thankyou'); })->name('thankyou');
 
 // Category page
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');

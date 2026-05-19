@@ -14,9 +14,11 @@ class Order extends Model
 
     // Define the fields that can be mass-assigned
     protected $fillable = [
-        'order_date',
+        'vendor_id',
+        'customer_id',
+        'guest_email',
         'status',
-        'total_price',
+        'total_amount',
         'shipping_address',
         'billing_address',
         'payment_method',
